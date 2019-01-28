@@ -1,0 +1,69 @@
+﻿<Page x:Class="CADImageViewer.CADImageViewerHomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CADImageViewer"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CADImageViewer - Home">
+
+    <Grid>
+        
+        <!-- Grid Column Definitions -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Grid Row Definitions -->
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <!-- Labels Denoted Here -->
+        
+        <!-- "Program" Category Label -->
+        <Label Grid.Column="0" Grid.Row="1">
+            Program
+        </Label>
+        <ListBox Grid.Column="0" Grid.Row="2">
+            <ListBoxItem>Program 1</ListBoxItem>
+            <ListBoxItem>Program 2</ListBoxItem>
+            <ListBoxItem>Program 3</ListBoxItem>
+        </ListBox>
+        
+        <!-- "Truck" Category Label -->
+        <Label Grid.Column="0" Grid.Row="4">
+            Truck
+        </Label>
+        <ListBox Grid.Column="0" Grid.Row="5">
+            <ListBoxItem>Truck 1</ListBoxItem>
+            <ListBoxItem>Truck 2</ListBoxItem>
+            <ListBoxItem>Truck 3</ListBoxItem>
+        </ListBox>
+
+        <!-- "DRE (Engineer) Category Label" -->
+        <Label Grid.Column="0" Grid.Row="7">
+            DRE ( Engineer )
+        </Label>
+        <ListBox Grid.Column="0" Grid.Row="8">
+            <ListBoxItem>Engineer 1</ListBoxItem>
+            <ListBoxItem>Engineer 2</ListBoxItem>
+            <ListBoxItem>Engineer 3</ListBoxItem>
+        </ListBox>
+
+        <!-- Get Report Button -->
+        <Button Grid.Column="1" Grid.Row="10" Click="Button_Click">Get Report</Button>
+    </Grid>
+</Page>
