@@ -1,4 +1,4 @@
-﻿# CADImageViewer
+# CADImageViewer
 
 ## Description
 Desktop app that reads in-home database to output installation information as well as specific picture of that installation to the user.
