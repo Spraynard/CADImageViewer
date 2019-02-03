@@ -1,0 +1,159 @@
+﻿<Window x:Class="CADImageViewer.CADImageViewerReportWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CADImageViewer"
+      mc:Ignorable="d" 
+      d:DesignHeight="1000" d:DesignWidth="800"
+      Title="CADImageViewer - Report"
+      x:Name="ReportWindow"
+      >
+
+    <Grid>
+        <!-- Resources for displaying the table'd data for our grid containing all the items available for installation -->
+        <Grid.Resources>
+
+            <!-- Visibility Trigger for Installation Notes List -->
+            <Style x:Key="NotesListVisibility" TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="True">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="False">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Visibility Trigger for Installation Notes List Empty Indication -->
+            <Style x:Key="NotesEmptyInidicationVisibility" TargetType="TextBlock">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="False">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="True">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Resources/Data Templates For Installation Data DataTable -->
+            <DataTemplate x:Key="ItemDataTemplate">
+                <Label Content="{Binding Path=Item}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="PartDataTemplate">
+                <Label Content="{Binding Path=Part}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="DescriptionDataTemplate">
+                <Label Content="{Binding Path=Description}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="QuantityDataTemplate">
+                <Label Content="{Binding Path=Quantity}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="StatusDataTemplate">
+                <Label Content="{Binding Path=Status}"/>
+            </DataTemplate>
+
+            <!-- Template for Notes -->
+            <DataTemplate x:Key="NoteTemplate">
+                <StackPanel 
+                    Orientation="Horizontal"
+                    Width="Auto"
+                    Margin="0 5 0 0">
+                    <Label 
+                        Content="{Binding Path=NoteID}"
+                        VerticalAlignment="Center"/>
+                    <TextBlock 
+                        Text="{Binding Path=NoteText}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                </StackPanel>
+            </DataTemplate>
+
+            <!-- Template For Images -->
+            <DataTemplate x:Key="listImageTemplate">
+                <Image Source="{Binding Path=FullName}" Stretch="UniformToFill"/>
+            </DataTemplate>
+
+        </Grid.Resources>
+
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- List of Installations -->
+        <Label Grid.Column="0" Grid.Row="0" Content="Installations"/>
+        <ListBox 
+            x:Name="Program"
+            SelectionChanged="ListBox_SelectionChanged"
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="15"
+            ItemsSource="{Binding SelectedInstallations, ElementName=ReportWindow}"
+            SelectedIndex="0"
+            Width="200"
+            HorizontalAlignment="Left"/>
+
+        <!-- Grid of Installation Data -->
+        <Label Grid.Column="0" Grid.Row="2" Content="Installation Data"/>
+        <Grid Grid.Column="0" Grid.Row="3" Margin="15"  HorizontalAlignment="Left" VerticalAlignment="Top">
+            <DataGrid ItemsSource="{Binding InstallationDataItems, ElementName=ReportWindow, Mode=OneWay}"/>
+        </Grid>
+
+        <!-- Installation Notes -->
+        <Label Grid.Column="0" Grid.Row="4" Content="Installation Notes"/>
+        <Grid x:Name="NotesGrid" Grid.Column="0" Grid.Row="5" Margin="15"  HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource NotesListVisibility}">
+            <DataGrid 
+                ItemsSource="{Binding InstallationNotes, ElementName=ReportWindow}"
+                AutoGenerateColumns="False"
+                Height="300"
+                VerticalAlignment="Top">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="ID">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NoteID}" Padding="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Text" Width="300">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NoteText}" TextWrapping="Wrap" Padding="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <TextBlock x:Name="EmptyNotesText" Grid.Column="0" Grid.Row="5" Margin="15" Text="There are currently no installation notes available" Style="{StaticResource NotesEmptyInidicationVisibility}"/>
+
+        <!-- Image Viewer -->
+        <Label Grid.Column="1" Grid.Row="0" Content="Installation Images"/>
+        <ListBox
+            x:Name="ImageDisplayList"
+            Grid.Column="1"
+            Grid.Row="2"
+            Grid.RowSpan="6"
+            ItemsSource="{Binding}"
+            ItemTemplate="{StaticResource listImageTemplate}"/>
+
+
+
+        <ScrollViewer Grid.Column="1" Grid.Row="2" Margin="15" Grid.RowSpan="6">
+            <TextBlock>
+                Hello there this is text
+            </TextBlock>
+        </ScrollViewer>
+    </Grid>
+</Window>
