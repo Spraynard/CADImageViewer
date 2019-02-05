@@ -8,7 +8,7 @@
       d:DesignHeight="1280" d:DesignWidth="1900"
       Title="CADImageViewer - Report"
       x:Name="ReportWindow"
-      >
+      Loaded="ReportWindow_Loaded">
     <Window.Resources>
         <local:IsValueLessThanParameter x:Key="valueLessThanParameter"/>
     </Window.Resources>
@@ -117,9 +117,9 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -131,25 +131,23 @@
             SelectionChanged="ListBox_SelectionChanged"
             Grid.Column="0"
             Grid.Row="1"
-            Margin="15"
             ItemsSource="{Binding SelectedInstallations, ElementName=ReportWindow}"
             SelectedIndex="0"
             Width="200"
             HorizontalAlignment="Left"/>
 
         <!-- Grid of Installation Data -->
-        <Label Grid.Column="0" Grid.Row="2" Content="Installation Data"/>
-        <Grid Grid.Column="0" Grid.Row="3" Margin="15"  HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Label Grid.Column="0" Grid.Row="2" Content="Data"/>
+        <Grid Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top">
             <DataGrid ItemsSource="{Binding InstallationDataItems, ElementName=ReportWindow, Mode=OneWay}"/>
         </Grid>
 
         <!-- Installation Notes -->
-        <Label Grid.Column="0" Grid.Row="4" Content="Installation Notes"/>
-        <Grid x:Name="NotesGrid" Grid.Column="0" Grid.Row="5" Margin="15"  HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource NotesListVisibility}">
+        <Label Grid.Column="0" Grid.Row="4" Content="Notes"/>
+        <Grid x:Name="NotesGrid" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource NotesListVisibility}">
             <DataGrid 
                 ItemsSource="{Binding InstallationNotes, ElementName=ReportWindow}"
                 AutoGenerateColumns="False"
-                Height="300"
                 VerticalAlignment="Top">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="ID">
@@ -179,7 +177,7 @@
             VerticalAlignment="Center"/>
 
         <!-- Image Viewer -->
-        <Label Grid.Column="1" Grid.Row="0" Content="Installation Images"/>
+        <Label Grid.Column="1" Grid.Row="0" Content="Images"/>
         <Grid
             Grid.Column="1"
             Grid.Row="1"

@@ -100,31 +100,25 @@ namespace CADImageViewer
         public CADImageViewerReportWindow(UserInputItem Item)
         {
             userInputItem = Item;
-            InstallationNotes = new ObservableCollection<InstallationNote>();
             InitializeComponent();
-           
-            // On startup, obtain all installations for our specific program, truck, and engineer
-            ObservableCollection<string> selectedInstallationsList = ObtainInstallationList(userInputItem.Program, userInputItem.Truck, userInputItem.Engineer);
-
-            // Set the list of installations available to our current SelectedInstallations.
-            SelectedInstallations = selectedInstallationsList;
         }
 
         // Public classbased getters 
         //private void ManipulateInstallationNoteView()
 
-        private ObservableCollection<string> ObtainInstallationList( string program, string truck, string engineer )
+        private ObservableCollection<string> ObtainInstallationList( string engineer )
         {
-            string queryString = String.Format("SELECT DISTINCT Installation FROM bom WHERE Program = '{0}' AND Truck = '{1}' AND DRE = '{2}'", program, truck, engineer);
+            //string queryString = String.Format("SELECT DISTINCT Installation FROM bom WHERE Program = '{0}' AND Truck = '{1}' AND DRE = '{2}'", program, truck, engineer);
+            string queryString = String.Format("SELECT DISTINCT Installation FROM bom WHERE DRE = '{0}'", engineer);
 
             Console.WriteLine("Printing Installation");
 
             return db.HandleQuery_ObservableCollection(queryString);
         }
 
-        private DataTable ObtainInstallationData( string installation, string program, string truck, string engineer )
+        private DataTable ObtainInstallationData( string installation, string engineer )
         {
-            string queryString = String.Format("SELECT Item, Part, Description, Quantity, Status, Picture FROM bom WHERE Installation = '{0}' AND Program = '{1}' AND Truck = '{2}' AND DRE = '{3}'", installation, program, truck, engineer);
+            string queryString = String.Format("SELECT Item, Part, Description, Quantity, Status, Picture FROM bom WHERE Installation = '{0}' AND DRE = '{1}'", installation, engineer);
 
             DataTable returnTable = db.HandleQuery(queryString);
 
@@ -138,12 +132,12 @@ namespace CADImageViewer
             return db.HandleQuery(queryString);
         }
 
-        private ObservableCollection<InstallationDataItem> BuildInstallationData( string installation, string program, string truck, string engineer )
+        private ObservableCollection<InstallationDataItem> BuildInstallationData( string installation, string engineer )
         {
             // Build "InstallationDataItem"s based on the selected installation
             ObservableCollection<InstallationDataItem> returnCollection = new ObservableCollection<InstallationDataItem>();
 
-            DataTable installationDataTable = ObtainInstallationData(installation, program, truck, engineer);
+            DataTable installationDataTable = ObtainInstallationData(installation, engineer);
 
             // Add our obtained items to the observable collections
             foreach (DataRow row in installationDataTable.Rows)
@@ -184,7 +178,7 @@ namespace CADImageViewer
             SelectedInstallation = selectedInstallation;
 
             // Setting the current InstallationDataItems class property to the built installation data
-            InstallationDataItems = BuildInstallationData(SelectedInstallation, UserInputItem.Program, UserInputItem.Truck, UserInputItem.Engineer);
+            InstallationDataItems = BuildInstallationData(SelectedInstallation, UserInputItem.Engineer);
 
             // Obtaining and setting the InstallationNotes class property
             InstallationNotes = BuildInstallationNotes(SelectedInstallation);
@@ -225,6 +219,18 @@ namespace CADImageViewer
             };
 
             imageWindow.Show();
+        }
+
+        // Operations to execute when we load our report window.
+        private void ReportWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            InstallationNotes = new ObservableCollection<InstallationNote>();
+
+            // On startup, obtain all installations for our specific program, truck, and engineer
+            ObservableCollection<string> selectedInstallationsList = ObtainInstallationList(userInputItem.Engineer);
+
+            // Set the list of installations available to our current SelectedInstallations.
+            SelectedInstallations = selectedInstallationsList;
         }
     }
 }

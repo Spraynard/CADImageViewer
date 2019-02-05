@@ -114,6 +114,24 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\WorkSans-Black.ttf" />
+    <Resource Include="Fonts\WorkSans-BlackItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-Bold.ttf" />
+    <Resource Include="Fonts\WorkSans-BoldItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-ExtraBold.ttf" />
+    <Resource Include="Fonts\WorkSans-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-ExtraLight.ttf" />
+    <Resource Include="Fonts\WorkSans-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-Italic.ttf" />
+    <Resource Include="Fonts\WorkSans-Light.ttf" />
+    <Resource Include="Fonts\WorkSans-LightItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-Medium.ttf" />
+    <Resource Include="Fonts\WorkSans-MediumItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-Regular.ttf" />
+    <Resource Include="Fonts\WorkSans-SemiBold.ttf" />
+    <Resource Include="Fonts\WorkSans-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\WorkSans-Thin.ttf" />
+    <Resource Include="Fonts\WorkSans-ThinItalic.ttf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -127,6 +145,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Fonts\OFL.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

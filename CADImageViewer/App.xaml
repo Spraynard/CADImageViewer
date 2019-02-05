@@ -4,6 +4,53 @@
              xmlns:local="clr-namespace:CADImageViewer"
              StartupUri="HomeWindow.xaml">
     <Application.Resources>
+        <FontFamily x:Key="WorkSans">pack://application:,,,/Fonts/#Work Sans</FontFamily>
+        
+        <!-- Header font size -->
+        <Style TargetType="{x:Type Control}" x:Key="headerFont">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="45"/>
+            </Style.Setters>
+        </Style>
+        
+        <!-- Base Font Size -->
+        <Style TargetType="{x:Type Control}" x:Key="baseFont">
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        
+        <!-- Base Window control styling -->
+        <Style TargetType="{x:Type Window}">
+            <Style.Setters>
+                <Setter Property="Background" Value="Beige"/>
+            </Style.Setters>
+        </Style>
+        
+        <!-- Base Label control styling -->
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource headerFont}">
+            <Style.Setters>
+                <Setter Property="FontFamily" Value="{StaticResource WorkSans}"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="FontStyle" Value="Italic"/>
+            </Style.Setters>
+        </Style>
+        
+        <!-- Base Textbox control styling -->
+        <!--<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource baseFont}">
+            <Style.Setters>
+                <Setter Property="FontFamily" Value="{StaticResource WorkSans}"/>
+            </Style.Setters>
+        </Style>-->
+        
+        <!-- General Listbox Styles -->
+        <Style TargetType="{x:Type ListBox}">
+            <Style.Setters>
+                <Setter Property="BorderThickness" Value="2 2 1 1"/>
+                <Setter Property="FontFamily" Value="{StaticResource WorkSans}"/>
+                <Setter Property="Margin" Value="0 10"/>
+            </Style.Setters>
+        </Style>
 
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource baseFont}"></Style>
+        
     </Application.Resources>
 </Application>
