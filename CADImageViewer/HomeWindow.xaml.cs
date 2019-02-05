@@ -113,7 +113,11 @@ namespace CADImageViewer
         // Handles clicking of the "Get Report" button
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            CADImageViewerReportWindow viewerReportPage = new CADImageViewerReportWindow( UserSelections );
+            CADImageViewerReportWindow viewerReportPage = new CADImageViewerReportWindow(UserSelections)
+            {
+                WindowState = (WindowState)2
+            };
+
             viewerReportPage.Show();
             //this.NavigationService.Navigate(viewerReportPage);
         }
@@ -231,6 +235,16 @@ namespace CADImageViewer
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private void Config_Button_Click(object sender, RoutedEventArgs e)
+        {
+            // Check to see what kind of permissions are available for the user.
+            bool adminAccess = db.CheckUpdateAccess();
+
+            Window configWindow = new ConfigWindow(db, adminAccess);
+
+            configWindow.ShowDialog();
         }
     }
 }

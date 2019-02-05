@@ -26,6 +26,7 @@ namespace CADImageViewer
     {
         private UserInputItem userInputItem;
         private DatabaseHandler db = new DatabaseHandler();
+        private DocumentStore ds = new DocumentStore();
         private string _selectedInstallation;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -37,11 +38,6 @@ namespace CADImageViewer
         {
             get { return (InstallationNotes.Count > 0) ? true : false; }
         }
-
-        //public Visibility ShowEmptyNotesControl
-        //{
-        //    get { return (InstallationNotes.Count == 0) ? Visibility.Visible : Visibility.Hidden; }
-        //}
 
         // Item user inputs in the home page.
         public UserInputItem UserInputItem
@@ -142,16 +138,6 @@ namespace CADImageViewer
             return db.HandleQuery(queryString);
         }
 
-        private String ObtainFolderString( string truck, string installation, string picture )
-        {
-            string queryString = String.Format("Select Folder FROM imagefilepath WHERE Truck = '{0}' AND Installation = '{1}' AND `Drawing Number` = '{2}'", truck, installation, picture);
-            Console.WriteLine("Query String: " + queryString);
-
-            ObservableCollection<string> returnCollection = db.HandleQuery_ObservableCollection(queryString);
-
-            return returnCollection[0];
-        }
-
         private ObservableCollection<InstallationDataItem> BuildInstallationData( string installation, string program, string truck, string engineer )
         {
             // Build "InstallationDataItem"s based on the selected installation
@@ -182,90 +168,6 @@ namespace CADImageViewer
             return returnCollection;
         }
 
-        private bool DirectoryExists( String imagePath )
-        {
-            DirectoryInfo di = new DirectoryInfo(imagePath);
-
-            try
-            {
-                if (di.Exists)
-                {
-                    Console.WriteLine("Our Directory Exists");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The process failed: {0}", e.ToString());
-                return false;
-            }
-
-            return true;
-        }
-
-        private ArrayList GetImagesForInstallation( string installation )
-        {
-            var imageFiles = new ArrayList();
-
-            var imageDirectory = @"g:/Freelance/Projects/CADIMageViewer/images/installation_images/";
-
-            var programBasedDirectory = String.Format("{0}_Installations_OCR_Scan", UserInputItem.Program);
-
-            var programImageDirectory = System.IO.Path.Combine( new String[] { imageDirectory, programBasedDirectory });
-
-            if ( DirectoryExists( programImageDirectory ) == false )
-            {
-                return imageFiles;
-            }
-
-            // Obtain the folders that our images are in.
-            foreach( InstallationDataItem item in InstallationDataItems )
-            {
-                if ( item.Picture == "999" )
-                {
-                    //Console.WriteLine("Picure does not exist");
-                    continue;
-                }
-
-                //Console.WriteLine("Installation: " + SelectedInstallation);
-                //Console.WriteLine("Truck: " + UserInputItem.Truck);
-                //Console.WriteLine("Picture: " + item.Picture);
-                var folderString = ObtainFolderString(UserInputItem.Truck, SelectedInstallation, item.Picture);
-
-                if ( folderString.Length > 0 )
-               {
-                    //Console.WriteLine("Our Folder String");
-                    //Console.WriteLine(folderString); 
-                    /* The path name we are trying to cast is
-                     *  [installation_id]_JPG_Images_Item_[folder_string]
-                     */
-                    var installationImageFolder = String.Format("{0}_JPG_Images_Item_{1}", SelectedInstallation, folderString);
-
-                    var installationImageDirectory = System.IO.Path.Combine(new string[] { programImageDirectory, installationImageFolder });
-
-                    if (DirectoryExists(installationImageDirectory) == true)
-                    {
-                        //Console.WriteLine("Directory Exists");
-                        string imageFile = String.Format("{0}_{1}_*_results.jpg", SelectedInstallation,  item.Picture);
-                        //Console.WriteLine("Image File");
-                        //Console.WriteLine(imageFile);
-                        // Our directory is good, now we need to find the image files.
-                        var files = Directory.GetFiles(installationImageDirectory, imageFile);
-
-                        foreach ( var image in files )
-                        {
-                            var info = new FileInfo(image);
-                            imageFiles.Add(info);
-                            //Console.WriteLine("Printing File");
-                            //Console.WriteLine(file);
-                        }
-                    }
-                }
-                //Console.WriteLine("Folder String: " + folderString);
-            }
-
-            return imageFiles;
-        }
-
         // Any changes to the selectbox containing installations will result in this handling function being run.
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -291,20 +193,38 @@ namespace CADImageViewer
             //ManipulateInstallationNoteView();
 
             // Obtaining Images Applicable our Installation.
-            ArrayList installationImages = GetImagesForInstallation(SelectedInstallation);
-            ImageDisplayList.DataContext = installationImages;
+            ArrayList installationImages = ds.ObtainInstallationImages(
+                SelectedInstallation,
+                UserInputItem.Program,
+                UserInputItem.Truck,
+                InstallationDataItems);
 
-            //Console.WriteLine("Installation Notes Length");
-            //Console.WriteLine(InstallationNotes.Count);
-            //Console.WriteLine(ShowNotes);
-            //Console.WriteLine(ShowEmptyNotesControl);
-            //Console.WriteLine(EmptyNotesText.Visibility);
+            ImageDisplayList.DataContext = installationImages;
         }
 
         protected void OnPropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        // When a user double clicks on an image it will show the full image in a new window.
+        private void ImageDisplayList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+
+            FileInfo SelectedImage = listBox.SelectedItem as FileInfo;
+
+            Console.WriteLine("What is our file's name?");
+            Console.WriteLine(SelectedImage.Name);
+
+            ImageWindow imageWindow = new ImageWindow(SelectedImage)
+            {
+                // Full Screen
+                WindowState = (WindowState)2
+            };
+
+            imageWindow.Show();
         }
     }
 }

@@ -5,22 +5,56 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CADImageViewer"
       mc:Ignorable="d" 
-      d:DesignHeight="1000" d:DesignWidth="800"
+      d:DesignHeight="1280" d:DesignWidth="1900"
       Title="CADImageViewer - Report"
       x:Name="ReportWindow"
       >
-
-    <Grid>
+    <Window.Resources>
+        <local:IsValueLessThanParameter x:Key="valueLessThanParameter"/>
+    </Window.Resources>
+    
+    <Grid Margin="15">
         <!-- Resources for displaying the table'd data for our grid containing all the items available for installation -->
         <Grid.Resources>
+            
+            <!-- Resposive Layout Triggers -->
+            <!--<Style x:Key="ResponsiveLayoutStyle" TargetType="Grid">
+                --><!-- Default Values --><!--
+                <Setter TargetName="" Property="Width" Value="20*"/>
+                <Setter Property=""
+            </Style>-->
+
+            <Style x:Key="LeftColumnResponsive" TargetType="ColumnDefinition">
+                <Setter Property="Width" Value="30*"/>
+                <Style.Triggers>
+                    <DataTrigger Value="True"
+                                 Binding="{Binding ElementName=ReportWindow, Path=ActualWidth,
+                                 Converter={StaticResource valueLessThanParameter},
+                                 ConverterParameter=1200}">
+                        <Setter Property="Width" Value="50*"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="RightColumnResponsive" TargetType="ColumnDefinition">
+                <Setter Property="Width" Value="70*"/>
+                <Style.Triggers>
+                    <DataTrigger Value="True"
+                                 Binding="{Binding ElementName=ReportWindow, Path=ActualWidth,
+                                 Converter={StaticResource valueLessThanParameter},
+                                 ConverterParameter=1200}">
+                        <Setter Property="Width" Value="50*"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
             <!-- Visibility Trigger for Installation Notes List -->
             <Style x:Key="NotesListVisibility" TargetType="Grid">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="True">
+                    <DataTrigger Binding="{Binding ElementName=ReportWindow, Path=ShowNotes}" Value="True">
                         <Setter Property="Visibility" Value="Visible"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="False">
+                    <DataTrigger Binding="{Binding ElementName=ReportWindow, Path=ShowNotes}" Value="False">
                         <Setter Property="Visibility" Value="Hidden"/>
                     </DataTrigger>
                 </Style.Triggers>
@@ -29,10 +63,10 @@
             <!-- Visibility Trigger for Installation Notes List Empty Indication -->
             <Style x:Key="NotesEmptyInidicationVisibility" TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="False">
+                    <DataTrigger Binding="{Binding ElementName=ReportWindow, Path=ShowNotes}" Value="False">
                         <Setter Property="Visibility" Value="Visible"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ElementName=ReportPage, Path=ShowNotes}" Value="True">
+                    <DataTrigger Binding="{Binding ElementName=ReportWindow, Path=ShowNotes}" Value="True">
                         <Setter Property="Visibility" Value="Hidden"/>
                     </DataTrigger>
                 </Style.Triggers>
@@ -71,24 +105,23 @@
 
             <!-- Template For Images -->
             <DataTemplate x:Key="listImageTemplate">
-                <Image Source="{Binding Path=FullName}" Stretch="UniformToFill"/>
+                <Image Source="{Binding Path=FullName}" Stretch="UniformToFill" Margin="10"/>
             </DataTemplate>
 
         </Grid.Resources>
 
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Style="{StaticResource LeftColumnResponsive}"/>
+            <ColumnDefinition Style="{StaticResource RightColumnResponsive}"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <!-- List of Installations -->
@@ -136,24 +169,31 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <TextBlock x:Name="EmptyNotesText" Grid.Column="0" Grid.Row="5" Margin="15" Text="There are currently no installation notes available" Style="{StaticResource NotesEmptyInidicationVisibility}"/>
+        <TextBlock 
+            x:Name="EmptyNotesText" 
+            Grid.Column="0" 
+            Grid.Row="5" 
+            Margin="15" 
+            Text="There are currently no installation notes available" 
+            Style="{StaticResource NotesEmptyInidicationVisibility}"
+            VerticalAlignment="Center"/>
 
         <!-- Image Viewer -->
         <Label Grid.Column="1" Grid.Row="0" Content="Installation Images"/>
-        <ListBox
-            x:Name="ImageDisplayList"
+        <Grid
             Grid.Column="1"
-            Grid.Row="2"
-            Grid.RowSpan="6"
-            ItemsSource="{Binding}"
-            ItemTemplate="{StaticResource listImageTemplate}"/>
-
-
-
-        <ScrollViewer Grid.Column="1" Grid.Row="2" Margin="15" Grid.RowSpan="6">
-            <TextBlock>
-                Hello there this is text
-            </TextBlock>
-        </ScrollViewer>
+            Grid.Row="1"
+            Grid.RowSpan="6">
+            <Border BorderThickness="5" BorderBrush="AliceBlue">
+                <ScrollViewer>
+                    <ListBox
+                        x:Name="ImageDisplayList"
+                        ItemsSource="{Binding}"
+                        ItemTemplate="{StaticResource listImageTemplate}"
+                        MouseDoubleClick="ImageDisplayList_MouseDoubleClick"
+                        Style="{StaticResource ResourceKey={x:Type ItemsControl}}"/>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

@@ -14,7 +14,7 @@ namespace CADImageViewer
 {
     // Takes in a query string and a table name in order to query the specific table.
     // Return: DataTable element filled with the results from our query.
-    class DatabaseHandler
+    public class DatabaseHandler
     {
         private string connectionString;
 
@@ -27,6 +27,37 @@ namespace CADImageViewer
             {
                 throw new Exception("Our connection string is not obtained");
             }
+        }
+
+        // Checks to see if password given associates with 
+        public bool CheckUpdateAccess()
+        {
+            bool updateAccess = false;
+            string sql = "UPDATE config SET `config_value` = 'yes' WHERE `key` = 'Permission'";
+
+            try
+            {
+                using (MySqlConnection c = new MySqlConnection(connectionString))
+                {
+                    c.Open();
+                    MySqlCommand command = new MySqlCommand(sql, c);
+                    int rowsAffected = command.ExecuteNonQuery();
+                    // Just trying to check if we can update this field without throwing an error.
+                    // If so, then we can update configuration values.
+                    HandleQuery("UPDATE config SET `config_value` = 'yes' WHERE `key` = 'Permission'");
+
+                    if ( rowsAffected == 1 )
+                    {
+                        updateAccess = true;
+                    }
+                }
+            }
+            catch
+            {
+                updateAccess = false;
+            }
+
+            return updateAccess;
         }
 
         public bool ConnectionAvailable()
@@ -64,6 +95,38 @@ namespace CADImageViewer
             return isConn;
         }
 
+        // Updating 
+        public bool Update_Image_Base_Config( string imageBasePath )
+        {
+            string sql = "UPDATE config SET config_value = @imageBasePath WHERE `key` = 'ImageBasePath'";
+            try
+            {
+                using (MySqlConnection c = new MySqlConnection(connectionString))
+                { 
+                    c.Open();
+                    MySqlCommand command = new MySqlCommand(sql, c);
+                    command.Parameters.AddWithValue("@imageBasePath", imageBasePath);
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if ( rowsAffected < 1 )
+                    {
+                        throw new Exception("No Rows were affected on this update query");
+                    }
+                }
+            }
+            catch (ArgumentException err)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public string ObtainBaseImageDirectory()
+        {
+            return HandleSelect_SingleString("config_value", "config", "key", "ImageBasePath");
+        }
+
         // Public method of class that handles queries and outputs a dataTable filled with the query return.
         public DataTable HandleQuery( string queryString )
         {
@@ -87,6 +150,30 @@ namespace CADImageViewer
             conn.Close();
 
             return dt;
+        }
+
+        public string HandleSelect_SingleString( string selectColumn, string table, string whereColumn, string whereValue )
+        {
+            string singleValue = null;
+            string sql = String.Format("SELECT {0} FROM {1} WHERE `{2}` = '{3}'", selectColumn, table, whereColumn, whereValue);
+            Console.WriteLine("SQL String: " + sql);
+            using (MySqlConnection c = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, c);
+                try
+                {
+                    c.Open();
+                    var executingValue = cmd.ExecuteScalar();
+
+                    singleValue = (executingValue == DBNull.Value) ? String.Empty : (string)executingValue;
+                    Console.WriteLine("Returned Value: " + singleValue);
+                }
+                catch ( Exception ex )
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return singleValue;
         }
 
         // Used to return a string type observable collection from our query.
