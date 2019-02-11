@@ -26,8 +26,7 @@ namespace CADImageViewer
         public PrintPreview( XpsDocument xps )
         {
             InitializeComponent();
-            DataContext = this;
-            DisplayedDocument = xps.GetFixedDocumentSequence();
+            PrintPreviewViewer.Document = xps.GetFixedDocumentSequence();
         }
     }
 }

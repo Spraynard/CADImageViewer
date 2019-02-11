@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="PrintPreview" Height="450" Width="800">
     <Grid>
-        <DocumentViewer Document="{Binding DisplayedDocument}"/>
+        <DocumentViewer  x:Name="PrintPreviewViewer" Document="{Binding DisplayedDocument}"/>
     </Grid>
 </Window>
