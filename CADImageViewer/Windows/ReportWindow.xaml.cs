@@ -31,8 +31,10 @@ namespace CADImageViewer
         public event PropertyChangedEventHandler PropertyChanged;
 
         private ObservableCollection<InstallationDataItem> _installationDataItems;
-        private ObservableCollection<string> _selectedInstallations;
-        private ObservableCollection<InstallationNote> _installationNotes;
+        private ObservableCollection<string> _availableInstallations;
+        private ObservableCollection<InstallationNote> _installationNotes = new ObservableCollection<InstallationNote>();
+
+        private ErrorPopup _errorPopup = new ErrorPopup();
 
         public Boolean ShowNotes
         {
@@ -53,16 +55,16 @@ namespace CADImageViewer
         }
 
         // List of installations obtained by user input in Home Page.
-        public ObservableCollection<string> SelectedInstallations
+        public ObservableCollection<string> AvailableInstallations
         {
             get
             {
-                return _selectedInstallations;
+                return _availableInstallations;
             }
             set
             {
-                _selectedInstallations = value;
-                OnPropertyChanged("SelectedInstallations");
+                _availableInstallations = value;
+                OnPropertyChanged("AvailableInstallations");
             }
         }
 
@@ -102,9 +104,6 @@ namespace CADImageViewer
             userInputItem = Item;
             InitializeComponent();
         }
-
-        // Public classbased getters 
-        //private void ManipulateInstallationNoteView()
 
         private ObservableCollection<string> ObtainInstallationList( string engineer )
         {
@@ -172,7 +171,7 @@ namespace CADImageViewer
             int listBoxSelectedIndex = listBox.SelectedIndex;
 
             // Obtaining the value of the selected Installation based on index.
-            string selectedInstallation = SelectedInstallations[listBoxSelectedIndex];
+            string selectedInstallation = AvailableInstallations[listBoxSelectedIndex];
 
             // Update the selected installation
             SelectedInstallation = selectedInstallation;
@@ -187,13 +186,43 @@ namespace CADImageViewer
             //ManipulateInstallationNoteView();
 
             // Obtaining Images Applicable our Installation.
-            ArrayList installationImages = ds.ObtainInstallationImages(
-                SelectedInstallation,
-                UserInputItem.Program,
-                UserInputItem.Truck,
-                InstallationDataItems);
+            ArrayList installationImages = new ArrayList();
 
-            ImageDisplayList.DataContext = installationImages;
+            try
+            {
+                installationImages = ds.ObtainInstallationImages(
+                    SelectedInstallation,
+                    UserInputItem.Program,
+                    UserInputItem.Truck,
+                    InstallationDataItems);
+            }
+            catch ( Exception ex )
+            {
+                // Something wrong with our path or whatever. We'll display it in our error window.
+                _errorPopup.ErrorText = ex.Message;
+                _errorPopup.CurrentWindowReference = this;
+
+                if ( _errorPopup.IsOpen == false )
+                {
+                    _errorPopup.IsOpen = true;
+                }
+
+                Console.WriteLine("Error occured in grabbing images. Heres the message given: " + ex.Message);
+            }
+            finally
+            {
+                if ( installationImages.Count > 0 )
+                {
+                    ImageDisplayList.DataContext = installationImages;
+                    InstallationImageEmptyIndication.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    InstallationImageEmptyIndication.Visibility = Visibility.Visible;
+                    ImageDisplayList.Visibility = Visibility.Hidden;
+                }
+            }
+                
         }
 
         protected void OnPropertyChanged(string name)
@@ -227,10 +256,29 @@ namespace CADImageViewer
             InstallationNotes = new ObservableCollection<InstallationNote>();
 
             // On startup, obtain all installations for our specific program, truck, and engineer
-            ObservableCollection<string> selectedInstallationsList = ObtainInstallationList(userInputItem.Engineer);
+            ObservableCollection<string> installationsList = ObtainInstallationList(userInputItem.Engineer);
 
             // Set the list of installations available to our current SelectedInstallations.
-            SelectedInstallations = selectedInstallationsList;
+            AvailableInstallations = installationsList;
+        }
+
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserInputItem PrintableUserInput = UserInputItem;
+            ArrayList AvailableInstallationsList = new ArrayList(AvailableInstallations);
+            ArrayList PrintableInstallationData = new ArrayList(InstallationDataItems);
+            ArrayList PrintableInstallationNotes = new ArrayList(InstallationNotes);
+            ArrayList PrintableInstallationImages = new ArrayList(ImageDisplayList.Items);
+            string InstallationSelected = SelectedInstallation;
+
+            PrintHandler printHandler = new PrintHandler(
+                PrintableUserInput,
+                InstallationSelected,
+                PrintableInstallationData,
+                PrintableInstallationNotes,
+                PrintableInstallationImages);
+
+            Console.WriteLine("Clicking on the print button");
         }
     }
 }

@@ -7,15 +7,26 @@
         <FontFamily x:Key="WorkSans">pack://application:,,,/Fonts/#Work Sans</FontFamily>
         
         <!-- Header font size -->
-        <Style TargetType="{x:Type Control}" x:Key="headerFont">
+        <Style TargetType="{x:Type FrameworkElement}" x:Key="headerFont">
             <Style.Setters>
-                <Setter Property="FontSize" Value="45"/>
+                <Setter Property="TextElement.FontSize" Value="45"/>
             </Style.Setters>
         </Style>
         
+        <!-- SubHeader font size -->
+        <Style TargetType="{x:Type Label}" x:Key="subHeaderFont">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontWeight" Value="Black"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0 0 0 15"/>
+            </Style.Setters>
+        </Style>
+
         <!-- Base Font Size -->
-        <Style TargetType="{x:Type Control}" x:Key="baseFont">
-            <Setter Property="FontSize" Value="18"/>
+        <Style TargetType="{x:Type FrameworkElement}" x:Key="baseFont">
+            <Setter Property="TextElement.FontSize" Value="18"/>
+            <Setter Property="TextElement.FontFamily" Value="{StaticResource WorkSans}"/>
         </Style>
         
         <!-- Base Window control styling -->
@@ -24,23 +35,33 @@
                 <Setter Property="Background" Value="Beige"/>
             </Style.Setters>
         </Style>
-        
+                
+        <!-- Base NormalText control styling -->
+        <Style TargetType="{x:Type local:NormalText}" BasedOn="{StaticResource baseFont}">
+            <Style.Setters>
+                <Setter Property="FontFamily" Value="{StaticResource WorkSans}"/>
+            </Style.Setters>
+        </Style>
+
+        <Style TargetType="{x:Type local:NormalText}" x:Key="normalSubHeaderFont">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontWeight" Value="Black"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="0 0 0 15"/>
+            </Style.Setters>
+        </Style>
+
         <!-- Base Label control styling -->
         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource headerFont}">
             <Style.Setters>
                 <Setter Property="FontFamily" Value="{StaticResource WorkSans}"/>
-                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="FontWeight" Value="ExtraBold"/>
                 <Setter Property="FontStyle" Value="Italic"/>
+                <Setter Property="Padding" Value="0"/>
             </Style.Setters>
         </Style>
-        
-        <!-- Base Textbox control styling -->
-        <!--<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource baseFont}">
-            <Style.Setters>
-                <Setter Property="FontFamily" Value="{StaticResource WorkSans}"/>
-            </Style.Setters>
-        </Style>-->
-        
+
         <!-- General Listbox Styles -->
         <Style TargetType="{x:Type ListBox}">
             <Style.Setters>
@@ -50,7 +71,11 @@
             </Style.Setters>
         </Style>
 
-        <Style TargetType="ListBoxItem" BasedOn="{StaticResource baseFont}"></Style>
-        
+        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource baseFont}"></Style>
+        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource baseFont}">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="14"/>
+            </Style.Setters>
+        </Style>
     </Application.Resources>
 </Application>

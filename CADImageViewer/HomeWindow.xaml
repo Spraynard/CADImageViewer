@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CADImageViewer"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="1280"
       Title="CADImageViewer - Home"
       Name="CADImageViewerHome">
 
@@ -36,29 +36,7 @@
         </Grid.RowDefinitions>
 
         <!-- UI elements are built here -->
-
-        <!-- Popup to show any errors that need attention -->
-        <Popup 
-            x:Name="ErrorPopup"
-            Height="200"
-            Width="500"
-            AllowsTransparency="True"
-            Placement="Center">
-            <Border
-                BorderThickness="2"
-                Background="AliceBlue"
-                Margin="0 0 5 5">
-                <Border.Effect>
-                    <DropShadowEffect/>
-                </Border.Effect>
-                <DockPanel Margin="10">
-                    <TextBlock DockPanel.Dock="Top" x:Name="ErrorPopupText" VerticalAlignment="Center" Text="" TextWrapping="Wrap"/>
-                    <Button DockPanel.Dock="Bottom" Content="CLOSE" Click="Popup_Close" Padding="10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-                </DockPanel>
-            </Border>
-        </Popup>
-
-
+        
         <!-- "Program" Category Label -->
         <Label Grid.Column="0" Grid.Row="1" Content="Program"/>
         <ListBox 
@@ -90,18 +68,30 @@
             Grid.RowSpan="2"
             ItemsSource="{Binding ElementName=CADImageViewerHome, Path=Engineers}"/>
 
-        <StackPanel Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="7" Margin="15 0">
-            <Label Content="Selected Items"/>
-            <Label Content="Selected Program"/>
-            <TextBlock x:Name="SelectedName"/>
-            <Label Content="Selected Truck"/>
-            <TextBlock x:Name="SelectedTruck"/>
-            <Label Content="Selected DRE (Engineer)"/>
-            <TextBlock x:Name="SelectedEngineer"/>
-        </StackPanel>
+        <Border Grid.Column="3" Margin="0 10" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="7" Padding="15" BorderThickness="2" BorderBrush="DarkBlue">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.ColumnSpan="2" Content="Selected Items"/>
+                <Label VerticalAlignment="Center" Grid.Row="1" Content="Program" Style="{StaticResource subHeaderFont}"/>
+                <local:NormalText VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" x:Name="SelectedName"/>
+                <Label VerticalAlignment="Center" Grid.Row="2" Content="Truck" Style="{StaticResource subHeaderFont}"/>
+                <local:NormalText VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" x:Name="SelectedTruck"/>
+                <Label VerticalAlignment="Center" Grid.Row="3" Content="DRE (Engineer)" Style="{StaticResource subHeaderFont}"/>
+                <local:NormalText VerticalAlignment="Center" Grid.Row ="3" Grid.Column="1" x:Name="SelectedEngineer"/>
+            </Grid>
+        </Border>
 
         <!-- Get Report Button -->
         <Button x:Name="ReportButton" Grid.Column="4" Grid.Row="10" IsEnabled="False" Click="Button_Click">Get Report</Button>
-        <Button Content="Configuration" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right" Width="85" Height="36" Click="Config_Button_Click"/>
+        <Button Content="Configuration" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Right" Height="50" Click="Config_Button_Click"/>
     </Grid>
 </Window>

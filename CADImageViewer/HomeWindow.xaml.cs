@@ -40,40 +40,55 @@ namespace CADImageViewer
         private ObservableCollection<string> _trucks = new ObservableCollection<string>();
         private ObservableCollection<string> _engineers = new ObservableCollection<string>();
 
-        private string _categorySelected = "";
-
+        ErrorPopup ErrorPopup { get; set; }
 
         public CADImageViewerHomeWindow()
         {
             InitializeComponent();
+            ErrorPopup = new ErrorPopup();
+            ErrorPopup.CurrentWindowReference = this;
+            PerformInitialization();
+        }
 
+        private void PerformInitialization()
+        {
             // On init, we want to obtain our available PROGRAMS
             string queryString = "SELECT DISTINCT Program FROM bom";
 
             ObservableCollection<string> programCollection;
+            bool connectionAvailable = false;
 
             try
             {
-                bool connectionAvailable = db.ConnectionAvailable();
+                Console.WriteLine("We are checking to see if there is a connection avaialable");
+                connectionAvailable = db.ConnectionAvailable();
 
-                if ( connectionAvailable == false )
+                if (connectionAvailable == false)
                 {
-                    throw new Exception("No Connection Available. Please contact administrator");
+                    throw new Exception("No Connection Available. Please check and see if you have correct configuration values. Contact administrator if you do.");
                 }
 
                 programCollection = db.HandleQuery_ObservableCollection(queryString);
 
                 Programs = programCollection;
             }
-            catch( Exception e )
+            catch (Exception e)
             {
-                string popupText = String.Format("{0}", e.ToString());
-                ErrorPopupText.Text = popupText;
-                ErrorPopup.IsOpen = true;
+                if ( ErrorPopup.IsOpen == false )
+                {
+                    string popupText = String.Format("{0}", e.Message);
+                    ErrorPopup.ErrorText = popupText;
+                    ErrorPopup.IsOpen = true;
+                }
+
             }
-
-
-            db.HandleQueryAndPrint(queryString);
+            finally
+            {
+                if ( connectionAvailable )
+                {
+                    ErrorPopup.IsOpen = false;
+                }
+            }
         }
 
         private string GetTrucksQueryString( string program )
@@ -104,11 +119,6 @@ namespace CADImageViewer
             set { _engineers = value; OnPropertyChanged("Engineers"); }
         }
 
-        public string SelectedCategory
-        {
-            get { return _categorySelected; }
-            set { _categorySelected = value; }
-        }
 
         // Handles clicking of the "Get Report" button
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -239,12 +249,14 @@ namespace CADImageViewer
 
         private void Config_Button_Click(object sender, RoutedEventArgs e)
         {
-            // Check to see what kind of permissions are available for the user.
-            bool adminAccess = db.CheckUpdateAccess();
 
-            Window configWindow = new ConfigWindow(db, adminAccess);
+            Window configWindow = new ConfigWindow( db );
 
             configWindow.ShowDialog();
+
+            Console.WriteLine("Checking to see if we catch this stuff");
+            db = new DatabaseHandler();
+            PerformInitialization();
         }
     }
 }

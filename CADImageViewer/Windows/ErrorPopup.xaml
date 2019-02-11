@@ -1,0 +1,32 @@
+﻿<Popup x:Class="CADImageViewer.ErrorPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:CADImageViewer"
+        mc:Ignorable="d" 
+        d:DesignHeight="450" d:DesignWidth="800"
+        Width="400"
+        Height="200"
+        PlacementTarget="{Binding Path=CurrentWindowReference}"
+        Placement="Center">
+    <Border BorderThickness="5" BorderBrush="SlateGray">
+        <Grid Background="Beige">
+            <Grid.Resources>
+                <Style TargetType="local:NormalText" x:Key="ErrorHeader" BasedOn="{StaticResource baseFont}">
+                    <Style.Setters>
+                        <Setter Property="Foreground" Value="DarkRed"/>
+                        <Setter Property="FontWeight" Value="ExtraBold"/>
+                        <Setter Property="FontSize" Value="25"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0 10 0 0"/>
+                        <Setter Property="FontStyle" Value="Italic"/>
+                    </Style.Setters>
+                </Style>
+            </Grid.Resources>
+            <local:NormalText Text="ERROR" Style="{StaticResource ErrorHeader}"/>
+            <local:NormalText Text="{Binding Path=ErrorText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="10 0"/>
+            <Button x:Name="popupCloseButton" Click="PopupCloseButton_Click" Content="CLOSE" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="10" Margin="15"/>
+        </Grid>
+    </Border>   
+</Popup>

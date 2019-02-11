@@ -29,7 +29,16 @@ namespace CADImageViewer
         {
 
             // Obtain applicable directory names ( currently only the image directory )
-            _imgDirectory = _db.ObtainBaseImageDirectory();
+
+            // Gets our base image folder path hosted in our dictionary
+            string imageBase = _db.ObtainBaseImageDirectory();
+
+            // Gets the hostname supplied from user input
+            string hostname = Properties.Settings.Default.hostname;
+
+            // Builds the base image directory we need to use in oder to build an image file path
+            _imgDirectory = String.Format(@"\\{0}\{1}\", hostname, imageBase);
+
 
             // Check if our image directory even exists (i.e., we have access to it)
             if (DirectoryExists(_imgDirectory) != false)
@@ -79,7 +88,7 @@ namespace CADImageViewer
             // Exit out of our function if the directory doesn't exist.
             if ( _imgDirectoryExists == false )
             {
-                return imageFiles;
+                throw new Exception("Base image directory does not exist.\nNo images will be available for viewing");
             }
 
             /* 
@@ -92,7 +101,7 @@ namespace CADImageViewer
 
             if ( DirectoryExists( fullProgramPath ) == false)
             {
-                return imageFiles;
+                throw new Exception("Program specific image directory does not exist.\nNo images will be available for viewing.");
             }
 
             foreach( InstallationDataItem item in items )
@@ -122,6 +131,7 @@ namespace CADImageViewer
                 }
 
                 string imageFileLookupString = String.Format("{0}_{1}_*_results.jpg", installation, item.Picture);
+                //string imageFileLookupString = String.Format("*.jpg", installation, item.Picture);
 
                 var obtainedImageFiles = Directory.GetFiles(fullItemImagePath, imageFileLookupString);
 

@@ -18,14 +18,8 @@
         <Grid.Resources>
             
             <!-- Resposive Layout Triggers -->
-            <!--<Style x:Key="ResponsiveLayoutStyle" TargetType="Grid">
-                --><!-- Default Values --><!--
-                <Setter TargetName="" Property="Width" Value="20*"/>
-                <Setter Property=""
-            </Style>-->
-
             <Style x:Key="LeftColumnResponsive" TargetType="ColumnDefinition">
-                <Setter Property="Width" Value="30*"/>
+                <Setter Property="Width" Value="35*"/>
                 <Style.Triggers>
                     <DataTrigger Value="True"
                                  Binding="{Binding ElementName=ReportWindow, Path=ActualWidth,
@@ -37,7 +31,7 @@
             </Style>
 
             <Style x:Key="RightColumnResponsive" TargetType="ColumnDefinition">
-                <Setter Property="Width" Value="70*"/>
+                <Setter Property="Width" Value="65*"/>
                 <Style.Triggers>
                     <DataTrigger Value="True"
                                  Binding="{Binding ElementName=ReportWindow, Path=ActualWidth,
@@ -59,7 +53,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
+            
             <!-- Visibility Trigger for Installation Notes List Empty Indication -->
             <Style x:Key="NotesEmptyInidicationVisibility" TargetType="TextBlock">
                 <Style.Triggers>
@@ -113,6 +107,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Style="{StaticResource LeftColumnResponsive}"/>
+            <ColumnDefinition/>
             <ColumnDefinition Style="{StaticResource RightColumnResponsive}"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -123,7 +118,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+    
         <!-- List of Installations -->
         <Label Grid.Column="0" Grid.Row="0" Content="Installations"/>
         <ListBox 
@@ -131,20 +126,33 @@
             SelectionChanged="ListBox_SelectionChanged"
             Grid.Column="0"
             Grid.Row="1"
-            ItemsSource="{Binding SelectedInstallations, ElementName=ReportWindow}"
+            ItemsSource="{Binding AvailableInstallations, ElementName=ReportWindow}"
             SelectedIndex="0"
             Width="200"
-            HorizontalAlignment="Left"/>
+            HorizontalAlignment="Left"
+            MinHeight="50"/>
 
         <!-- Grid of Installation Data -->
         <Label Grid.Column="0" Grid.Row="2" Content="Data"/>
-        <Grid Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <DataGrid ItemsSource="{Binding InstallationDataItems, ElementName=ReportWindow, Mode=OneWay}"/>
+        <Grid Grid.Column="0" Grid.Row="3" VerticalAlignment="Top" MinHeight="100">
+            <DataGrid ItemsSource="{Binding InstallationDataItems, ElementName=ReportWindow, Mode=OneWay}"
+                      AutoGenerateColumns="False"
+                      MinColumnWidth="50"
+                      ColumnWidth="*">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Item" Binding="{Binding Path=Item}"/>
+                    <DataGridTextColumn Header="Part" Binding="{Binding Path=Part}" MinWidth="100"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Path=Description}" MinWidth="300"  Width="300"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Path=Quantity}"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Path=Status}"/>
+                    <DataGridTextColumn Header="Picture" Binding="{Binding Path=Picture}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
 
         <!-- Installation Notes -->
         <Label Grid.Column="0" Grid.Row="4" Content="Notes"/>
-        <Grid x:Name="NotesGrid" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource NotesListVisibility}">
+        <Grid x:Name="NotesGrid" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource NotesListVisibility}" MinHeight="100">
             <DataGrid 
                 ItemsSource="{Binding InstallationNotes, ElementName=ReportWindow}"
                 AutoGenerateColumns="False"
@@ -157,7 +165,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Text" Width="300">
+                    <DataGridTemplateColumn Header="Text" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding NoteText}" TextWrapping="Wrap" Padding="5"/>
@@ -167,22 +175,43 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <TextBlock 
+        <local:NormalText 
             x:Name="EmptyNotesText" 
             Grid.Column="0" 
             Grid.Row="5" 
             Margin="15" 
-            Text="There are currently no installation notes available" 
+            Text="No Installation Notes Available" 
             Style="{StaticResource NotesEmptyInidicationVisibility}"
-            VerticalAlignment="Center"/>
+            FontWeight="Bold"
+            FontSize="18"
+            Foreground="DarkRed"
+            VerticalAlignment="Top"/>
+        
+        
+        <!-- Grid Divider -->
+        <GridSplitter 
+            Grid.Row="0" 
+            Grid.Column="1" 
+            Grid.RowSpan="6" 
+            Width="5" 
+            VerticalAlignment="Stretch" 
+            HorizontalAlignment="Center"
+            Padding="15 0"
+            ShowsPreview="False"/>
 
         <!-- Image Viewer -->
-        <Label Grid.Column="1" Grid.Row="0" Content="Images"/>
+        <StackPanel Grid.Column="2" Grid.Row="0" >
+            <Label Content="Images"/>
+            <local:NormalText 
+                Text="Double click on image to display it in a new window"
+                TextWrapping="Wrap"/>
+        </StackPanel>
         <Grid
-            Grid.Column="1"
+            Grid.Column="2"
             Grid.Row="1"
-            Grid.RowSpan="6">
-            <Border BorderThickness="5" BorderBrush="AliceBlue">
+            Grid.RowSpan="6"
+            Margin="0 15 0 0">
+            <Border BorderThickness="2 2 1 1 " BorderBrush="SlateGray" x:Name="InstallationImageContainer">
                 <ScrollViewer>
                     <ListBox
                         x:Name="ImageDisplayList"
@@ -192,6 +221,15 @@
                         Style="{StaticResource ResourceKey={x:Type ItemsControl}}"/>
                 </ScrollViewer>
             </Border>
+            <local:NormalText
+                x:Name="InstallationImageEmptyIndication"
+                Text="No Images Available"
+                TextWrapping="Wrap"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="30 0"
+                FontSize="40"
+                FontWeight="ExtraBlack"/>
         </Grid>
     </Grid>
 </Window>

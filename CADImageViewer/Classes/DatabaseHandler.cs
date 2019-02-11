@@ -12,21 +12,14 @@ using System.Collections.ObjectModel;
 
 namespace CADImageViewer
 {
-    // Takes in a query string and a table name in order to query the specific table.
-    // Return: DataTable element filled with the results from our query.
     public class DatabaseHandler
     {
-        private string connectionString;
+        public string ConnectionString { get; set; }
 
         // Initialization
         public DatabaseHandler()
         {
-            int cStringObtained = ObtainConnectionString();
-
-            if ( cStringObtained != 1 )
-            {
-                throw new Exception("Our connection string is not obtained");
-            }
+            ConnectionString = ObtainConnectionString();
         }
 
         // Checks to see if password given associates with 
@@ -37,7 +30,7 @@ namespace CADImageViewer
 
             try
             {
-                using (MySqlConnection c = new MySqlConnection(connectionString))
+                using (MySqlConnection c = new MySqlConnection(ConnectionString))
                 {
                     c.Open();
                     MySqlCommand command = new MySqlCommand(sql, c);
@@ -67,7 +60,7 @@ namespace CADImageViewer
 
             try
             {
-                using (c = new MySqlConnection(connectionString))
+                using (c = new MySqlConnection(ConnectionString))
                 {
                     c.Open();
                     isConn = true;
@@ -101,7 +94,7 @@ namespace CADImageViewer
             string sql = "UPDATE config SET config_value = @imageBasePath WHERE `key` = 'ImageBasePath'";
             try
             {
-                using (MySqlConnection c = new MySqlConnection(connectionString))
+                using (MySqlConnection c = new MySqlConnection(ConnectionString))
                 { 
                     c.Open();
                     MySqlCommand command = new MySqlCommand(sql, c);
@@ -132,7 +125,7 @@ namespace CADImageViewer
         {
             DataTable dt = new DataTable();
 
-            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
             {
@@ -156,8 +149,7 @@ namespace CADImageViewer
         {
             string singleValue = null;
             string sql = String.Format("SELECT {0} FROM {1} WHERE `{2}` = '{3}'", selectColumn, table, whereColumn, whereValue);
-            Console.WriteLine("SQL String: " + sql);
-            using (MySqlConnection c = new MySqlConnection(connectionString))
+            using (MySqlConnection c = new MySqlConnection(ConnectionString))
             {
                 MySqlCommand cmd = new MySqlCommand(sql, c);
                 try
@@ -166,7 +158,6 @@ namespace CADImageViewer
                     var executingValue = cmd.ExecuteScalar();
 
                     singleValue = (executingValue == DBNull.Value) ? String.Empty : (string)executingValue;
-                    Console.WriteLine("Returned Value: " + singleValue);
                 }
                 catch ( Exception ex )
                 {
@@ -217,19 +208,43 @@ namespace CADImageViewer
             }
         }
 
-        private int ObtainConnectionString()
+        private string ObtainConnectionString()
         {
-            // I Should try and provide encryption to the configuration settings so I might have to do something here that performs unencryption operations.
+            string cString = String.Empty;
+            string server = Properties.Settings.Default.hostname;
+            string userId = Properties.Settings.Default.username;
+            string password = Properties.Settings.Default.password;
 
-            ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["CADImageViewer.Properties.Settings.CADImageViewerConnectionString.Admin"];
-
-            if ( settings != null )
+            // We're definitely not going to have a 
+            if (
+                String.IsNullOrEmpty(server) ||
+                String.IsNullOrEmpty(userId) ||
+                String.IsNullOrEmpty(password)
+            )
             {
-                connectionString = settings.ConnectionString;
-                return 1;
+                return cString;
             }
 
-            return 0;
+            // Getting partial connection string
+            ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["CADImageViewer.Properties.Settings.CADImageViewerConnectionString.User"];
+
+            if (settings == null)
+            {
+                return cString;
+            }
+
+            // Insert our connection string into the builder
+            cString = settings.ConnectionString;
+
+            MySqlConnectionStringBuilder builder =
+                new MySqlConnectionStringBuilder(cString);
+
+            // Supply additional values
+            builder.Server = Properties.Settings.Default.hostname;
+            builder.UserID = Properties.Settings.Default.username;
+            builder.Password = Properties.Settings.Default.password;
+
+            return builder.ConnectionString;
         }
     }
 }
