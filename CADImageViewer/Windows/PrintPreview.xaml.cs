@@ -21,13 +21,13 @@ namespace CADImageViewer
     public partial class PrintPreview : Window
     {
         // The document sequence displayed to our document viewer's "Document" parameter
-        FixedDocumentSequence DocumentReference { get; set; }
+        IDocumentPaginatorSource DisplayedDocument { get; set; }
 
         public PrintPreview( XpsDocument xps )
         {
-            DocumentReference = xps.GetFixedDocumentSequence();
             InitializeComponent();
             DataContext = this;
+            DisplayedDocument = xps.GetFixedDocumentSequence();
         }
     }
 }

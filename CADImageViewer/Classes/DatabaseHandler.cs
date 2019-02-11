@@ -53,6 +53,52 @@ namespace CADImageViewer
             return updateAccess;
         }
 
+        private DataTable ObtainInstallationData(string installation, string engineer)
+        {
+            string queryString = String.Format("SELECT Item, Part, Description, Quantity, Status, Picture FROM bom WHERE Installation = '{0}' AND DRE = '{1}'", installation, engineer);
+
+            DataTable returnTable = HandleQuery(queryString);
+
+            return returnTable;
+        }
+
+        private DataTable ObtainInstallationNotes(string installation)
+        {
+            string queryString = String.Format("Select NoteID, Note from `installation notes` WHERE Installation = '{0}'", installation);
+
+            return HandleQuery(queryString);
+        }
+
+        public ObservableCollection<InstallationDataItem> BuildInstallationData(string installation, string engineer)
+        {
+            // Build "InstallationDataItem"s based on the selected installation
+            ObservableCollection<InstallationDataItem> returnCollection = new ObservableCollection<InstallationDataItem>();
+
+            DataTable installationDataTable = ObtainInstallationData(installation, engineer);
+
+            // Add our obtained items to the observable collections
+            foreach (DataRow row in installationDataTable.Rows)
+            {
+                returnCollection.Add(new InstallationDataItem(Convert.ToString(row[0]), Convert.ToString(row[1]), Convert.ToString(row[2]), Convert.ToString(row[3]), Convert.ToString(row[4]), Convert.ToString(row[5])));
+            }
+
+            return returnCollection;
+        }
+
+        public ObservableCollection<InstallationNote> BuildInstallationNotes(string installation)
+        {
+            ObservableCollection<InstallationNote> returnCollection = new ObservableCollection<InstallationNote>();
+
+            DataTable installationNotes = ObtainInstallationNotes(installation);
+
+            foreach (DataRow row in installationNotes.Rows)
+            {
+                returnCollection.Add(new InstallationNote(Convert.ToString(row[0]), Convert.ToString(row[1])));
+            }
+
+            return returnCollection;
+        }
+
         public bool ConnectionAvailable()
         {
             bool isConn = false;
@@ -210,7 +256,6 @@ namespace CADImageViewer
 
         private string ObtainConnectionString()
         {
-            string cString = String.Empty;
             string server = Properties.Settings.Default.hostname;
             string userId = Properties.Settings.Default.username;
             string password = Properties.Settings.Default.password;
@@ -222,27 +267,24 @@ namespace CADImageViewer
                 String.IsNullOrEmpty(password)
             )
             {
-                return cString;
+                return null;
             }
 
             // Getting partial connection string
-            ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["CADImageViewer.Properties.Settings.CADImageViewerConnectionString.User"];
+            string settings = Properties.Settings.Default.connection_string;
 
             if (settings == null)
             {
-                return cString;
+                return null;
             }
 
-            // Insert our connection string into the builder
-            cString = settings.ConnectionString;
-
             MySqlConnectionStringBuilder builder =
-                new MySqlConnectionStringBuilder(cString);
+                new MySqlConnectionStringBuilder(settings);
 
             // Supply additional values
-            builder.Server = Properties.Settings.Default.hostname;
-            builder.UserID = Properties.Settings.Default.username;
-            builder.Password = Properties.Settings.Default.password;
+            builder.Server = server;
+            builder.UserID = userId;
+            builder.Password = password;
 
             return builder.ConnectionString;
         }

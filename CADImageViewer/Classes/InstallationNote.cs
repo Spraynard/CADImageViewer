@@ -8,16 +8,13 @@ namespace CADImageViewer
 {
     public class InstallationNote
     {
-        private readonly string _noteId;
-        private readonly string _noteText;
+        public string NoteID { get; set; }
+        public string NoteText { get; set; }
 
         public InstallationNote( string id, string noteString )
         {
-            _noteId = id;
-            _noteText = noteString;
+            NoteID = id;
+            NoteText = noteString;
         }
-
-        public string NoteID { get { return _noteId; } }
-        public string NoteText { get { return _noteText; } }
     }
 }

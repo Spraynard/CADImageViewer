@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CADImageViewer;
+using CADImageViewer.Classes.Printing;
 
 namespace CADImageViewerTests
 {
@@ -8,9 +9,26 @@ namespace CADImageViewerTests
     public class PrintingTests
     {
         [TestMethod]
-        public void WindowTests()
+        public void InstallationPrintableTest()
         {
             
+
+        }
+
+        [TestMethod]
+        public void PrintHandlerTest()
+        {
+
+        }
+
+        [TestMethod]
+        public void PrintSchemaTest()
+        {
+            PrintSchema printSchema = new PrintSchema();
+
+            Assert.IsInstanceOfType(printSchema, typeof(PrintSchema));
+
+            Assert.IsInstanceOfType(printSchema.Database, typeof(DatabaseHandler));
 
         }
     }

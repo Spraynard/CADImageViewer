@@ -115,51 +115,9 @@ namespace CADImageViewer
             return db.HandleQuery_ObservableCollection(queryString);
         }
 
-        private DataTable ObtainInstallationData( string installation, string engineer )
-        {
-            string queryString = String.Format("SELECT Item, Part, Description, Quantity, Status, Picture FROM bom WHERE Installation = '{0}' AND DRE = '{1}'", installation, engineer);
 
-            DataTable returnTable = db.HandleQuery(queryString);
 
-            return returnTable;
-        }
 
-        private DataTable ObtainInstallationNotes( string installation )
-        {
-            string queryString = String.Format("Select NoteID, Note from `installation notes` WHERE Installation = '{0}'", installation);
-
-            return db.HandleQuery(queryString);
-        }
-
-        private ObservableCollection<InstallationDataItem> BuildInstallationData( string installation, string engineer )
-        {
-            // Build "InstallationDataItem"s based on the selected installation
-            ObservableCollection<InstallationDataItem> returnCollection = new ObservableCollection<InstallationDataItem>();
-
-            DataTable installationDataTable = ObtainInstallationData(installation, engineer);
-
-            // Add our obtained items to the observable collections
-            foreach (DataRow row in installationDataTable.Rows)
-            {
-                returnCollection.Add(new InstallationDataItem(Convert.ToString(row[0]), Convert.ToString(row[1]), Convert.ToString(row[2]), Convert.ToString(row[3]), Convert.ToString(row[4]), Convert.ToString(row[5])));
-            }
-
-            return returnCollection;
-        }
-
-        private ObservableCollection<InstallationNote> BuildInstallationNotes( string installation )
-        {
-            ObservableCollection<InstallationNote> returnCollection = new ObservableCollection<InstallationNote>();
-
-            DataTable installationNotes = ObtainInstallationNotes(installation);
-
-            foreach ( DataRow row in installationNotes.Rows )
-            {
-                returnCollection.Add(new InstallationNote(Convert.ToString(row[0]), Convert.ToString(row[1])));
-            }
-
-            return returnCollection;
-        }
 
         // Any changes to the selectbox containing installations will result in this handling function being run.
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -177,10 +135,10 @@ namespace CADImageViewer
             SelectedInstallation = selectedInstallation;
 
             // Setting the current InstallationDataItems class property to the built installation data
-            InstallationDataItems = BuildInstallationData(SelectedInstallation, UserInputItem.Engineer);
+            InstallationDataItems = db.BuildInstallationData(SelectedInstallation, UserInputItem.Engineer);
 
             // Obtaining and setting the InstallationNotes class property
-            InstallationNotes = BuildInstallationNotes(SelectedInstallation);
+            InstallationNotes = db.BuildInstallationNotes(SelectedInstallation);
 
             // Selectively Show / Hide Installation Notes Based on whether we have any.
             //ManipulateInstallationNoteView();
@@ -264,21 +222,9 @@ namespace CADImageViewer
 
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
-            UserInputItem PrintableUserInput = UserInputItem;
-            ArrayList AvailableInstallationsList = new ArrayList(AvailableInstallations);
-            ArrayList PrintableInstallationData = new ArrayList(InstallationDataItems);
-            ArrayList PrintableInstallationNotes = new ArrayList(InstallationNotes);
-            ArrayList PrintableInstallationImages = new ArrayList(ImageDisplayList.Items);
-            string InstallationSelected = SelectedInstallation;
+            PrintHandler printHandler = new PrintHandler( userInputItem.Engineer, AvailableInstallations.ToArray() );
 
-            PrintHandler printHandler = new PrintHandler(
-                PrintableUserInput,
-                InstallationSelected,
-                PrintableInstallationData,
-                PrintableInstallationNotes,
-                PrintableInstallationImages);
-
-            Console.WriteLine("Clicking on the print button");
+            printHandler.PrintFullReport();
         }
     }
 }

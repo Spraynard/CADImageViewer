@@ -201,7 +201,14 @@
 
         <!-- Image Viewer -->
         <StackPanel Grid.Column="2" Grid.Row="0" >
-            <Label Content="Images"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Images"/>
+                <Button Grid.Column="1" Click="PrintButton_Click" Content="Print" HorizontalAlignment="Right" MinWidth="100"/>
+            </Grid>
             <local:NormalText 
                 Text="Double click on image to display it in a new window"
                 TextWrapping="Wrap"/>

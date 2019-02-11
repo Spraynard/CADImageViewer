@@ -58,5 +58,15 @@ namespace CADImageViewer.Properties {
                 this["password"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Database=cadimageviewer;")]
+        public string connection_string {
+            get {
+                return ((string)(this["connection_string"]));
+            }
+        }
     }
 }

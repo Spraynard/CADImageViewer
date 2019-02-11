@@ -13,121 +13,104 @@ using System.Windows.Xps.Packaging;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Collections;
+using System.Printing;
 
 // Printing stuff
-using CADImageViewer.Classes.Printing
+using CADImageViewer.Classes.Printing;
+using System.IO.Packaging;
 
 namespace CADImageViewer
 {
     public class PrintHandler
     {
         public PrintDialog PrintDialog { get; set; }
-        public UserInputItem UserInput { get; set; }
-        public ArrayList Installations { get; set; }
-        public DatabaseHandler DataHandler { get; set; }
+        public string Engineer { get; set; }
+        public string[] Installations { get; set; }
+        public string TemporaryPreviewPath { get; set; }
 
-        public PrintHandler( UserInputItem userInputItem, ArrayList installations )
+        public PrintHandler(string engineer, string[] installations)
         {
-            UserInput = userInputItem;
+            PrintDialog = new PrintDialog();
+            Engineer = engineer;
             Installations = installations;
-            DataHandler = new DatabaseHandler();
+            TemporaryPreviewPath = returnPrintableTempName();
+        }
+
+        private string returnPrintableTempName()
+        {
+            return Path.GetTempPath() + "cadimg-" + Guid.NewGuid().ToString() + ".xaml";
         }
 
         /**
-         * Breaking apart each of the items that will be visible on one page into different sections
-         */
-        private Section DocumentTitle()
-        {
-            Section pageSection = new Section();
-            return pageSection;
-        }
-
-        /**
-         * Title of the Installation
-         */
-        private TextBlock InstallationTitle() { return new TextBlock(); }
-
-        /**
-         * Installation Data section contains 
-         */
-        private Section InstallationDataSection()
-        {
-            Section pageSection = new Section();
-            return pageSection;
-
-            Section a = new Section();
-        }
-
-        /**
-         * Installation notes will be built with this function on a fixed page
-         */
-        private Section InstallationNotesSection()
-        {
-            Section pageSection = new Section();
-            return pageSection;
-        }
-
-        private FixedPage BuildInformationPage()
-        {
-            FixedPage page = new FixedPage();
-
-            return page;
-        }
-
-        /**
-         * Schemas are built here.
-         */
-        public FixedDocument CreateReportDocument( PrintDialog pd )
-        {
-            FixedDocument document = new FixedDocument();
-            SetDocumentDimensions(pd, document);
-            return document;
-        }
-
-        public FlowDocument CreateFullInstallationReport( PrintDialog pd )
+        * Using Schema: Full Report
+        * Description of steps when user makes dialog selection:
+        *   1. Run through the installations that are being supplied. For each installation, output, in order:
+        *       * Installation Data
+        *       * Installation Title
+        *       * Installation Notes
+        *       
+        *   2. Again go through our installations and obtain the images specific to that installation.
+        *       Each image should have a title to reference the installation data with each image.
+        */
+        public FlowDocument CreateFullInstallationReport(PrintDialog pd)
         {
             PrintSchema ps = new PrintSchema();
             FlowDocument document = new FlowDocument();
-            
+
             // Setting our Flow Document columns to have the same width as the printable area
             document.ColumnWidth = pd.PrintableAreaWidth;
+            document.PageHeight = pd.PrintableAreaHeight;
+            document.PageWidth = pd.PrintableAreaWidth;
 
-           List<UIElement> printableElements = ps.RunFullSchema();
-            foreach( UIElement elem in printableElements)
+            List<Block> printableElements = ps.RunFullSchema( Engineer, Installations );
+
+            foreach (Block elem in printableElements)
             {
-                PageContent page = new PageContent();
-
+                // Add these blocks to our flow document
+                document.Blocks.Add(elem);
             }
 
             return document;
         }
 
-        private bool ShowPrintPreview()
+        private bool ShowPrintPreview( FlowDocument fd, string fileName )
         {
+            DocumentPaginator paginator = ((IDocumentPaginatorSource)fd).DocumentPaginator;
+
+            XpsDocument xps = new XpsDocument(fileName, FileAccess.ReadWrite);
+            XpsDocumentWriter xpw = XpsDocument.CreateXpsDocumentWriter(xps);
+
+            xpw.Write(paginator);
+
+            PrintPreview previewWindow = new PrintPreview(xps);
+
+            previewWindow.ShowDialog();
+
+            xps.Close();
+
             return true;
         }
 
-        /**
-         * Using Schema: Full Report
-         * Description of steps when user makes dialog selection:
-         *   1. Run through the installations that are being supplied. For each installation, output, in order:
-         *       * Installation Data
-         *       * Installation Title
-         *       * Installation Notes
-         *       
-         *   2. Again go through our installations and obtain the images specific to that installation.
-         *       Each image should have a title to reference the installation data with each image.
-         */
+
         public void PrintFullReport()
         {
-            PrintSchema fullReportSchema = new PrintSchema();
+            Nullable<bool> DialogInput = PrintDialog.ShowDialog();
 
-            if ( PrintDialog.ShowDialog() == true )
+            if ( DialogInput == true || DialogInput == false )
             {
-                if ( ShowPrintPreview() == true )
+                FlowDocument PrintableFlowDocument = CreateFullInstallationReport(PrintDialog);
+
+                if (ShowPrintPreview( PrintableFlowDocument, TemporaryPreviewPath ) == true)
                 {
                     // Now we print
                 }
             }
+
+            // Delete the temporary file that was made in order to show the print preview
+            if (File.Exists(TemporaryPreviewPath))
+            {
+                File.Delete(TemporaryPreviewPath);
+            }
         }
     }
+}
