@@ -15,20 +15,8 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_189C52BEBCCBDBE33A2D906A3263CF8F"
+        "MsmKey" = "8:_4F724A2E383B01DB36FC292E3BD8EC7A"
         "OwnerKey" = "8:_B37717EA610648C2A4793389F6E6FE9F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B08801B4B56C9CB4E85CA8526D6915F"
-        "OwnerKey" = "8:_B37717EA610648C2A4793389F6E6FE9F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B08801B4B56C9CB4E85CA8526D6915F"
-        "OwnerKey" = "8:_189C52BEBCCBDBE33A2D906A3263CF8F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -45,8 +33,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5B08801B4B56C9CB4E85CA8526D6915F"
+        "MsmKey" = "8:_CCBDE69CAF7293CDE1FE1555A9B04ABF"
+        "OwnerKey" = "8:_B37717EA610648C2A4793389F6E6FE9F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CCBDE69CAF7293CDE1FE1555A9B04ABF"
+        "OwnerKey" = "8:_4F724A2E383B01DB36FC292E3BD8EC7A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D5FAB618DBD94C9B8AA71596F91FC335"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,13 +58,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7751C49E851E726EA9B0D7B14596610F"
+        "OwnerKey" = "8:_4F724A2E383B01DB36FC292E3BD8EC7A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_189C52BEBCCBDBE33A2D906A3263CF8F"
+        "OwnerKey" = "8:_CCBDE69CAF7293CDE1FE1555A9B04ABF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7751C49E851E726EA9B0D7B14596610F"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -85,6 +91,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -101,6 +123,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -130,51 +168,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_189C52BEBCCBDBE33A2D906A3263CF8F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4F724A2E383B01DB36FC292E3BD8EC7A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:MySql.Data, Version=8.0.14.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_189C52BEBCCBDBE33A2D906A3263CF8F"
+                    "_4F724A2E383B01DB36FC292E3BD8EC7A"
                     {
                     "Name" = "8:MySql.Data.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:MySql.Data.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_02244D78F6C24518B24464CDB326E746"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5B08801B4B56C9CB4E85CA8526D6915F"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_5B08801B4B56C9CB4E85CA8526D6915F"
-                    {
-                    "Name" = "8:Google.Protobuf.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Google.Protobuf.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_02244D78F6C24518B24464CDB326E746"
@@ -223,6 +230,57 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CCBDE69CAF7293CDE1FE1555A9B04ABF"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_CCBDE69CAF7293CDE1FE1555A9B04ABF"
+                    {
+                    "Name" = "8:Google.Protobuf.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Google.Protobuf.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_02244D78F6C24518B24464CDB326E746"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D5FAB618DBD94C9B8AA71596F91FC335"
+            {
+            "SourcePath" = "8:G:\\Freelance\\Projects\\CADImageViewer\\images\\icons\\cadimageviewer.ico"
+            "TargetName" = "8:cadimageviewer.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_02244D78F6C24518B24464CDB326E746"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -255,7 +313,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_E4CB5D0772094B83839B93309EA98AF0"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -278,9 +336,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:CadImageViewerSetup"
+        "ProductName" = "8:CADImageViewer"
         "ProductCode" = "8:{5DFAC79E-671A-4DF3-8F59-8BA350DC7DC5}"
-        "PackageCode" = "8:{BDE11434-8FEB-4EC1-AC69-96AA1D83B9B7}"
+        "PackageCode" = "8:{EB517F78-0943-4490-A44F-AD0089295132}"
         "UpgradeCode" = "8:{0D6B4E32-FDC0-4F72-90CE-F891049B85CF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -288,14 +346,14 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
-        "ARPHELPTELEPHONE" = "8:"
+        "Manufacturer" = "8:General_Manufacturer"
+        "ARPHELPTELEPHONE" = "8:9062310761"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:CadImageViewerSetup"
+        "Title" = "8:CadImageViewer"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Default Company Name"
+        "ARPCONTACT" = "8:General_Author"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:"
+        "ARPCOMMENTS" = "8:View installation images and data based on the engineer selected"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -400,6 +458,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_2F6D4717B8134DA7A91F7AFD30181360"
+            {
+            "Name" = "8:CADImageViewer Shortcut"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_B37717EA610648C2A4793389F6E6FE9F"
+            "Folder" = "8:_E4CB5D0772094B83839B93309EA98AF0"
+            "WorkingFolder" = "8:_02244D78F6C24518B24464CDB326E746"
+            "Icon" = "8:_D5FAB618DBD94C9B8AA71596F91FC335"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
