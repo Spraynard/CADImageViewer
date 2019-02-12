@@ -14,7 +14,7 @@ namespace CADImageViewer
         public string Label { get; set; }
 
         private string _value;
-        public string Value { get { return _value; } set { Console.WriteLine("Value being set: " + value );  _value = value; OnPropertyChanged("Value"); } }
+        public string Value { get { return _value; } set { _value = value; OnPropertyChanged("Value"); } }
 
         public bool ReadOnly { get; set; }
 
@@ -63,56 +63,11 @@ namespace CADImageViewer
         }
     }
 
-    public class BaseImagePathConfiguration : ConfigurationItem
-    {
-        public DatabaseHandler DBRef { get; set; }
-        public string BaseImagePath { get; set; }
-
-        public BaseImagePathConfiguration( DatabaseHandler databaseReference ) : base()
-        {
-            DBRef = databaseReference;
-            Label = "Base Image Path";
-            getValue();
-        }
-
-        protected override void getValue()
-        {
-            try
-            {
-                string BaseImagePath = DBRef.ObtainBaseImageDirectory();
-
-                if (!String.IsNullOrEmpty(BaseImagePath))
-                {
-                    Value = BaseImagePath;
-                }
-            }
-            catch( Exception e )
-            {
-                Console.WriteLine("We had a problem getting our configuration value");
-            }
-        }
-
-        public override void SetValue()
-        {
-            try
-            {
-                bool updateValue = DBRef.Update_Image_Base_Config(Value);
-
-            }
-            catch( Exception e )
-            {
-                Console.WriteLine("Our Update went wrong");
-            }
-        }
-    }
-
     class ConfigWindowViewModel
     {
         private DatabaseHandler DBRef { get; set; }
 
         public List<ConfigurationItem> ConfigData { get; set; }
-
-        public bool AdminAccess { get; set; }
 
         public Command UpdateConfigurationValues { get; set; }
         public Action CloseWindow { get; set; }
@@ -121,22 +76,12 @@ namespace CADImageViewer
         {
             DBRef = dbRef;
 
-            AdminAccess = DBRef.CheckUpdateAccess();
-
             List<ConfigurationItem> InitialConfigData = new List<ConfigurationItem>();
 
             InitialConfigData.Add(new UserConfiguration("username", "Username"));
             InitialConfigData.Add(new UserConfiguration("password", "Password"));
             InitialConfigData.Add(new UserConfiguration("hostname", "Host IP"));
-
-            BaseImagePathConfiguration ImagePathConfig = new BaseImagePathConfiguration(DBRef);
-
-            if ( AdminAccess == false )
-            {
-                ImagePathConfig.ReadOnly = true;
-            }
-
-            InitialConfigData.Add(ImagePathConfig);
+            InitialConfigData.Add(new UserConfiguration("baseImagePath", "Base Image Path"));
 
             ConfigData = InitialConfigData;
 

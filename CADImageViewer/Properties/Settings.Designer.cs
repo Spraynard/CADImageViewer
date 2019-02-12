@@ -68,5 +68,17 @@ namespace CADImageViewer.Properties {
                 return ((string)(this["connection_string"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string baseImagePath {
+            get {
+                return ((string)(this["baseImagePath"]));
+            }
+            set {
+                this["baseImagePath"] = value;
+            }
+        }
     }
 }

@@ -32,7 +32,8 @@ namespace CADImageViewer
             // Obtain applicable directory names ( currently only the image directory )
 
             // Gets our base image folder path hosted in our dictionary
-            string imageBase = DataBase.ObtainBaseImageDirectory();
+            //string imageBase = DataBase.ObtainBaseImageDirectory();
+            string imageBase = Properties.Settings.Default.baseImagePath;
 
             // Gets the hostname supplied from user input
             string hostname = Properties.Settings.Default.hostname;
@@ -40,11 +41,22 @@ namespace CADImageViewer
             // Builds the base image directory we need to use in oder to build an image file path
             _imgDirectory = String.Format(@"\\{0}\{1}\", hostname, imageBase);
 
+            if ( hostname == "localhost" )
+            {
+                _imgDirectory = String.Format(@"{0}", imageBase);
+            }
 
             // Check if our image directory even exists (i.e., we have access to it)
-            if (DirectoryExists(_imgDirectory) != false)
+            try
             {
-                _imgDirectoryExists = true;
+                if (DirectoryExists(_imgDirectory) != false)
+                {
+                    _imgDirectoryExists = true;
+                }
+            }
+            catch( Exception e )
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -100,6 +112,7 @@ namespace CADImageViewer
             // Combine program specific directory with the base directory and check if it exists.
             string fullProgramPath = System.IO.Path.Combine(new string[] { _imgDirectory, programSpecificDirectory });
 
+            Console.WriteLine("Full Program Path: {0}", fullProgramPath);
             if ( DirectoryExists( fullProgramPath ) == false)
             {
                 throw new Exception("Program specific image directory does not exist.\nNo images will be available for viewing.");
@@ -126,6 +139,7 @@ namespace CADImageViewer
 
                 string fullItemImagePath = System.IO.Path.Combine(new string[] { fullProgramPath, installationSpecificImageFolder });
 
+                Console.WriteLine("Full Item Image Path {0}", fullItemImagePath);
                 if (DirectoryExists(fullItemImagePath) != true)
                 {
                     continue;

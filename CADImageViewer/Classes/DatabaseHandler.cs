@@ -22,36 +22,6 @@ namespace CADImageViewer
             ConnectionString = ObtainConnectionString();
         }
 
-        // Checks to see if password given associates with 
-        public bool CheckUpdateAccess()
-        {
-            bool updateAccess = false;
-            string sql = "UPDATE config SET `config_value` = 'yes' WHERE `key` = 'Permission'";
-
-            try
-            {
-                using (MySqlConnection c = new MySqlConnection(ConnectionString))
-                {
-                    c.Open();
-                    MySqlCommand command = new MySqlCommand(sql, c);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    // Just trying to check if we can update this field without throwing an error.
-                    // If so, then we can update configuration values.
-                    HandleQuery("UPDATE config SET `config_value` = 'yes' WHERE `key` = 'Permission'");
-
-                    if ( rowsAffected == 1 )
-                    {
-                        updateAccess = true;
-                    }
-                }
-            }
-            catch
-            {
-                updateAccess = false;
-            }
-
-            return updateAccess;
-        }
 
         private DataTable ObtainInstallationData(string installation, string engineer)
         {
@@ -132,38 +102,6 @@ namespace CADImageViewer
             }
 
             return isConn;
-        }
-
-        // Updating 
-        public bool Update_Image_Base_Config( string imageBasePath )
-        {
-            string sql = "UPDATE config SET config_value = @imageBasePath WHERE `key` = 'ImageBasePath'";
-            try
-            {
-                using (MySqlConnection c = new MySqlConnection(ConnectionString))
-                { 
-                    c.Open();
-                    MySqlCommand command = new MySqlCommand(sql, c);
-                    command.Parameters.AddWithValue("@imageBasePath", imageBasePath);
-                    int rowsAffected = command.ExecuteNonQuery();
-
-                    if ( rowsAffected < 1 )
-                    {
-                        throw new Exception("No Rows were affected on this update query");
-                    }
-                }
-            }
-            catch (ArgumentException err)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public string ObtainBaseImageDirectory()
-        {
-            return HandleSelect_SingleString("config_value", "config", "key", "ImageBasePath");
         }
 
         // Public method of class that handles queries and outputs a dataTable filled with the query return.
