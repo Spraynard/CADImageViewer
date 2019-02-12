@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CADImageViewerTests", "CADImageViewerTests\CADImageViewerTests.csproj", "{F885CE28-DFB8-41AC-8E43-316E3E8AAA4E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CadImageViewerSetup", "CadImageViewerSetup\CadImageViewerSetup.vdproj", "{5436E784-E9B0-43EC-B02B-8F1C933F3FA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,11 +28,17 @@ Global
 		{F885CE28-DFB8-41AC-8E43-316E3E8AAA4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F885CE28-DFB8-41AC-8E43-316E3E8AAA4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F885CE28-DFB8-41AC-8E43-316E3E8AAA4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5436E784-E9B0-43EC-B02B-8F1C933F3FA7}.Debug|Any CPU.ActiveCfg = Debug
+		{5436E784-E9B0-43EC-B02B-8F1C933F3FA7}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {347E4A7F-F90B-438B-AFF2-0E16355E08FE}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 EndGlobal
