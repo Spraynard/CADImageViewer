@@ -16,7 +16,6 @@ namespace CADImageViewer.Classes.Printing
         public InstallationNote[] InstallationNotes { get; set; }
 
         // Font sizes for our data output
-        private int TitleSize = 30;
         private int TableHeaderSize = 25;
         private int TableCellHeaderSize = 18;
         private int TableCellSize = 14;
@@ -36,6 +35,7 @@ namespace CADImageViewer.Classes.Printing
 
             // Base Styling for Table
             t.CellSpacing = 10;
+            t.FontFamily = new FontFamily("Verdana");
 
 
             TableColumn headerColumn = new TableColumn();

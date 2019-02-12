@@ -25,8 +25,8 @@ namespace CADImageViewer
     public partial class CADImageViewerReportWindow : Window, INotifyPropertyChanged
     {
         private UserInputItem userInputItem;
-        private DatabaseHandler db = new DatabaseHandler();
-        private DocumentStore ds = new DocumentStore();
+        private DatabaseHandler DataBase { get; set; }
+        private DocumentStore DocumentStore { get; set; }
         private string _selectedInstallation;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -102,6 +102,8 @@ namespace CADImageViewer
         public CADImageViewerReportWindow(UserInputItem Item)
         {
             userInputItem = Item;
+            DataBase = new DatabaseHandler();
+            DocumentStore = new DocumentStore(DataBase);
             InitializeComponent();
         }
 
@@ -110,14 +112,8 @@ namespace CADImageViewer
             //string queryString = String.Format("SELECT DISTINCT Installation FROM bom WHERE Program = '{0}' AND Truck = '{1}' AND DRE = '{2}'", program, truck, engineer);
             string queryString = String.Format("SELECT DISTINCT Installation FROM bom WHERE DRE = '{0}'", engineer);
 
-            Console.WriteLine("Printing Installation");
-
-            return db.HandleQuery_ObservableCollection(queryString);
+            return DataBase.HandleQuery_ObservableCollection(queryString);
         }
-
-
-
-
 
         // Any changes to the selectbox containing installations will result in this handling function being run.
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -135,10 +131,10 @@ namespace CADImageViewer
             SelectedInstallation = selectedInstallation;
 
             // Setting the current InstallationDataItems class property to the built installation data
-            InstallationDataItems = db.BuildInstallationData(SelectedInstallation, UserInputItem.Engineer);
+            InstallationDataItems = DataBase.BuildInstallationData(SelectedInstallation, UserInputItem.Engineer);
 
             // Obtaining and setting the InstallationNotes class property
-            InstallationNotes = db.BuildInstallationNotes(SelectedInstallation);
+            InstallationNotes = DataBase.BuildInstallationNotes(SelectedInstallation);
 
             // Selectively Show / Hide Installation Notes Based on whether we have any.
             //ManipulateInstallationNoteView();
@@ -148,7 +144,7 @@ namespace CADImageViewer
 
             try
             {
-                installationImages = ds.ObtainInstallationImages(
+                installationImages = DocumentStore.ObtainInstallationImages(
                     SelectedInstallation,
                     UserInputItem.Program,
                     UserInputItem.Truck,
@@ -164,8 +160,6 @@ namespace CADImageViewer
                 {
                     _errorPopup.IsOpen = true;
                 }
-
-                Console.WriteLine("Error occured in grabbing images. Heres the message given: " + ex.Message);
             }
             finally
             {
@@ -196,9 +190,6 @@ namespace CADImageViewer
 
             FileInfo SelectedImage = listBox.SelectedItem as FileInfo;
 
-            Console.WriteLine("What is our file's name?");
-            Console.WriteLine(SelectedImage.Name);
-
             ImageWindow imageWindow = new ImageWindow(SelectedImage)
             {
                 // Full Screen
@@ -222,7 +213,7 @@ namespace CADImageViewer
 
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
-            PrintHandler printHandler = new PrintHandler( userInputItem.Engineer, AvailableInstallations.ToArray() );
+            PrintHandler printHandler = new PrintHandler( userInputItem, AvailableInstallations.ToArray() );
 
             printHandler.PrintFullReport();
         }

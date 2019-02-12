@@ -24,21 +24,56 @@ namespace CADImageViewer
     public class PrintHandler
     {
         public PrintDialog PrintDialog { get; set; }
-        public string Engineer { get; set; }
+        public UserInputItem UserInputItem { get; set; }
         public string[] Installations { get; set; }
         public string TemporaryPreviewPath { get; set; }
 
-        public PrintHandler(string engineer, string[] installations)
+        public PrintHandler(UserInputItem userInput, string[] installations)
         {
             PrintDialog = new PrintDialog();
-            Engineer = engineer;
+            UserInputItem = userInput;
             Installations = installations;
             TemporaryPreviewPath = returnPrintableTempName();
         }
 
+        public void PrintFullReport()
+        {
+            Nullable<bool> DialogInput = PrintDialog.ShowDialog();
+
+            if (DialogInput == true )
+            {
+                // Check to see if duplexing is available for the current printer, and if so, force it.
+                PrintTicket currentJobTicket = PrintDialog.PrintTicket;
+
+                if ( currentJobTicket.Duplexing != null )
+                {
+                    currentJobTicket.Duplexing = Duplexing.TwoSidedLongEdge;
+                }
+
+                // Create our flow document
+                FlowDocument PrintableFlowDocument = CreateFullInstallationReport(PrintDialog);
+
+                // Create XPS Document from flow document
+                DocumentPaginator paginator = ((IDocumentPaginatorSource)PrintableFlowDocument).DocumentPaginator;
+                XpsDocument xps = new XpsDocument(TemporaryPreviewPath, FileAccess.ReadWrite);
+
+
+                if (ShowPrintPreview(xps, paginator) == true)
+                {
+                    PrintDialog.PrintDocument(paginator, String.Format("Printing Report For Engineer: {0}", UserInputItem.Engineer));
+                }
+            }
+
+            // Delete the temporary file that was made in order to show the print preview
+            if (File.Exists(TemporaryPreviewPath))
+            {
+                File.Delete(TemporaryPreviewPath);
+            }
+        }
+
         private string returnPrintableTempName()
         {
-            return Path.GetTempPath() + "cadimg-" + Guid.NewGuid().ToString() + ".xaml";
+            return Path.GetTempPath() + "cadimg-" + Guid.NewGuid().ToString() + ".zip";
         }
 
         /**
@@ -62,7 +97,7 @@ namespace CADImageViewer
             document.PageHeight = pd.PrintableAreaHeight;
             document.PageWidth = pd.PrintableAreaWidth;
 
-            List<Block> printableElements = ps.RunFullSchema( Engineer, Installations );
+            List<Block> printableElements = ps.RunFullSchema( UserInputItem, Installations );
 
             foreach (Block elem in printableElements)
             {
@@ -73,44 +108,19 @@ namespace CADImageViewer
             return document;
         }
 
-        private bool ShowPrintPreview( FlowDocument fd, string fileName )
+        private Nullable<bool> ShowPrintPreview( XpsDocument xps, DocumentPaginator paginator )
         {
-            DocumentPaginator paginator = ((IDocumentPaginatorSource)fd).DocumentPaginator;
-
-            XpsDocument xps = new XpsDocument(fileName, FileAccess.ReadWrite);
             XpsDocumentWriter xpw = XpsDocument.CreateXpsDocumentWriter(xps);
 
             xpw.Write(paginator);
 
             PrintPreview previewWindow = new PrintPreview(xps);
 
-            previewWindow.ShowDialog();
+            Nullable<bool> PreviewDialogState = previewWindow.ShowDialog();
 
             xps.Close();
 
-            return true;
-        }
-
-
-        public void PrintFullReport()
-        {
-            Nullable<bool> DialogInput = PrintDialog.ShowDialog();
-
-            if ( DialogInput == true || DialogInput == false )
-            {
-                FlowDocument PrintableFlowDocument = CreateFullInstallationReport(PrintDialog);
-
-                if (ShowPrintPreview( PrintableFlowDocument, TemporaryPreviewPath ) == true)
-                {
-                    // Now we print
-                }
-            }
-
-            // Delete the temporary file that was made in order to show the print preview
-            if (File.Exists(TemporaryPreviewPath))
-            {
-                File.Delete(TemporaryPreviewPath);
-            }
+            return PreviewDialogState;
         }
     }
 }

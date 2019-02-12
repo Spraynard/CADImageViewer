@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CADImageViewer"
         mc:Ignorable="d"
-        Title="PrintPreview" Height="450" Width="800">
+        Title="PrintPreview" Height="800" Width="1200">
     <Grid>
-        <DocumentViewer  x:Name="PrintPreviewViewer" Document="{Binding DisplayedDocument}"/>
+        <DocumentViewer  x:Name="PrintPreviewViewer" Document="{Binding DisplayedDocument}">
+            <DocumentViewer.Resources>
+                <Style TargetType="{x:Type ToolBar}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </Style>
+            </DocumentViewer.Resources>
+            <DocumentViewer.InputBindings>
+                <KeyBinding Key="P" Modifiers="Ctrl" Command="ApplicationCommands.NotACommand"/>
+            </DocumentViewer.InputBindings>
+        </DocumentViewer>
+        <Button x:Name="CancelPrintButton" Content="CANCEL" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Margin="0 0 125 2" Click="CancelPrintButton_Click"/>
+        <Button x:Name="PrintReportButton" Content="PRINT REPORT" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Margin="0 0 15 2" Click="PrintReportButton_Click"/>
     </Grid>
 </Window>

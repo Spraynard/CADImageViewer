@@ -60,7 +60,6 @@ namespace CADImageViewer
 
             try
             {
-                Console.WriteLine("We are checking to see if there is a connection avaialable");
                 connectionAvailable = db.ConnectionAvailable();
 
                 if (connectionAvailable == false)
@@ -197,11 +196,6 @@ namespace CADImageViewer
                 default:
                     break;
             }
-
-            //Console.WriteLine("Query String");
-            //Console.WriteLine(queryString);
-            //db.HandleQueryAndPrint(queryString);
-            //observableReference = db.HandleQuery_ObservableCollection(queryString);
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -209,8 +203,6 @@ namespace CADImageViewer
             ListBox ListBoxContext = sender as ListBox;
 
             string ListBoxName = ListBoxContext.Name;
-
-            System.Diagnostics.Debug.WriteLine(ListBoxName);
 
             // List Box Item Context.
             ListBoxItem SelectedListBoxItem = (ListBoxContext.SelectedItem as ListBoxItem);
@@ -223,9 +215,6 @@ namespace CADImageViewer
 
             // Inserting the content into our "ItemsSelected" class, which is eventually passed over to the report window.
             InsertUserSelection(ListBoxName, SelectedListBoxItemContent);
-
-            // For Debug Purposes
-            //UserSelections.Print();
 
             UpdateNextListBoxWithData(ListBoxName);
 
@@ -254,7 +243,6 @@ namespace CADImageViewer
 
             configWindow.ShowDialog();
 
-            Console.WriteLine("Checking to see if we catch this stuff");
             db = new DatabaseHandler();
             PerformInitialization();
         }

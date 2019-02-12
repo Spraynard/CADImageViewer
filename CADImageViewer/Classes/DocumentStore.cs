@@ -11,12 +11,13 @@ namespace CADImageViewer
 {
     class DocumentStore
     {
-        DatabaseHandler _db = new DatabaseHandler();
+        public DatabaseHandler DataBase = new DatabaseHandler();
         private bool _imgDirectoryExists = false;
         private string _imgDirectory = null;
 
-        public DocumentStore()
+        public DocumentStore( DatabaseHandler database )
         {
+            DataBase = database;
             InitializeDocumentStore();
         }
 
@@ -31,7 +32,7 @@ namespace CADImageViewer
             // Obtain applicable directory names ( currently only the image directory )
 
             // Gets our base image folder path hosted in our dictionary
-            string imageBase = _db.ObtainBaseImageDirectory();
+            string imageBase = DataBase.ObtainBaseImageDirectory();
 
             // Gets the hostname supplied from user input
             string hostname = Properties.Settings.Default.hostname;
@@ -70,7 +71,7 @@ namespace CADImageViewer
         private String ObtainFolderString(string truck, string installation, string picture)
         {
             string queryString = String.Format("SELECT Folder FROM imagefilepath WHERE Truck = '{0}' AND Installation = '{1}' AND `Drawing Number` = '{2}'", truck, installation, picture);
-            ObservableCollection<string> returnCollection = _db.HandleQuery_ObservableCollection(queryString);
+            ObservableCollection<string> returnCollection = DataBase.HandleQuery_ObservableCollection(queryString);
 
             return returnCollection[0];
         }

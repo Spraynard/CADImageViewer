@@ -28,5 +28,15 @@ namespace CADImageViewer
             InitializeComponent();
             PrintPreviewViewer.Document = xps.GetFixedDocumentSequence();
         }
+
+        private void CancelPrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+        }
+
+        private void PrintReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+        }
     }
 }

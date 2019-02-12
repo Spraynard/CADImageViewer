@@ -149,7 +149,6 @@ namespace CADImageViewer
             {
                 if ( item.ReadOnly == false )
                 {
-                    Console.WriteLine("Value Being set: " + item.Value);
                     item.SetValue();
                 }
             }
@@ -157,51 +156,6 @@ namespace CADImageViewer
             Properties.Settings.Default.Save();
 
             CloseWindow();
-            Console.WriteLine("We're trying to save our configs");
         }
-
-        //public bool TextChanged
-        //{
-        //    get { return _textChanged; }
-        //    set { _textChanged = value; }
-        //}
-
-        //private void Close_Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.Close();
-        //}
-
-        //private void Save_Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    TextBox imageFilePath = baseImageFilepathTextBox;
-        //    string fp_text = imageFilePath.Text
-        //    //g:/Freelance/Projects/CADIMageViewer/images/installation_images/
-        //    bool updateSuccess = _dbRef.Update_Image_Base_Config(fp_text);
-
-        //    if (updateSuccess != true)
-        //    {
-        //        // Popup something like update failed or whatever.
-        //        FlashTextBox.Text = "Update of values not successful. Error occured.";
-        //    }
-        //    else
-        //    {
-        //        FlashTextBox.Text = "Update of config values successful";
-        //    }
-
-        //    TextChanged = false;
-        //}
-
-        //private void ImageFilePathText_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    if (SaveButton.IsEnabled == false && _adminAccess)
-        //    {
-        //        SaveButton.IsEnabled = true;
-        //    }
-
-        //    if (FlashTextBox.Text.Count<char>() > 0)
-        //    {
-        //        FlashTextBox.Text = "";
-        //    }
-        //}
     }
 }
