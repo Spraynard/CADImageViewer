@@ -112,7 +112,6 @@ namespace CADImageViewer
             // Combine program specific directory with the base directory and check if it exists.
             string fullProgramPath = System.IO.Path.Combine(new string[] { _imgDirectory, programSpecificDirectory });
 
-            Console.WriteLine("Full Program Path: {0}", fullProgramPath);
             if ( DirectoryExists( fullProgramPath ) == false)
             {
                 throw new Exception("Program specific image directory does not exist.\nNo images will be available for viewing.");
@@ -139,7 +138,6 @@ namespace CADImageViewer
 
                 string fullItemImagePath = System.IO.Path.Combine(new string[] { fullProgramPath, installationSpecificImageFolder });
 
-                Console.WriteLine("Full Item Image Path {0}", fullItemImagePath);
                 if (DirectoryExists(fullItemImagePath) != true)
                 {
                     continue;
