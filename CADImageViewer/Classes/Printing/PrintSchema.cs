@@ -81,17 +81,20 @@ namespace CADImageViewer.Classes.Printing
                         bitmap.UriSource = new Uri(fileInfo.FullName);
                         bitmap.EndInit();
 
-                        tbitmap.BeginInit();
-                        tbitmap.Source = bitmap;
-                        tbitmap.Transform = transform;
-                        tbitmap.EndInit();
+                        //tbitmap.BeginInit();
+                        //tbitmap.Source = bitmap;
+                        //tbitmap.Transform = transform;
+                        //tbitmap.EndInit();
 
-                        installationImage.Source = tbitmap;
+                        //installationImage.Source = tbitmap;
+
+                        installationImage.Source = bitmap;
 
                         // Applying transforms
-                        //transform.CenterX = installationImage.ActualWidth / 2;
-                        //transform.CenterY = installationImage.ActualHeight / 2;
+                        transform.CenterX = installationImage.ActualWidth / 2;
+                        transform.CenterY = installationImage.ActualHeight / 2;
 
+                        installationImage.RenderTransform = transform;
 
                         BlockUIContainer uiContainer = new BlockUIContainer();
                         uiContainer.BreakPageBefore = true;
