@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CADImageViewer;
+using CADImageViewer.Classes;
 using CADImageViewer.Classes.Printing;
 
 namespace CADImageViewerTests
@@ -21,15 +21,15 @@ namespace CADImageViewerTests
 
         }
 
-        [TestMethod]
-        public void PrintSchemaTest()
-        {
-            PrintSchema printSchema = new PrintSchema();
+        //[TestMethod]
+        //public void PrintSchemaTest()
+        //{
+        //    PrintSchema printSchema = new PrintSchema();
 
-            Assert.IsInstanceOfType(printSchema, typeof(PrintSchema));
+        //    Assert.IsInstanceOfType(printSchema, typeof(PrintSchema));
 
-            Assert.IsInstanceOfType(printSchema.Database, typeof(DatabaseHandler));
+        //    Assert.IsInstanceOfType(printSchema.Database, typeof(DatabaseHandler));
 
-        }
+        //}
     }
 }

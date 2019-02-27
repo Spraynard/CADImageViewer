@@ -49,7 +49,16 @@ namespace CADImageViewer
             // Add our obtained items to the observable collections
             foreach (DataRow row in installationDataTable.Rows)
             {
-                returnCollection.Add(new InstallationDataItem(Convert.ToString(row[0]), Convert.ToString(row[1]), Convert.ToString(row[2]), Convert.ToString(row[3]), Convert.ToString(row[4]), Convert.ToString(row[5])));
+                returnCollection.Add(new InstallationDataItem()
+                {
+                    Item = Convert.ToString(row[0]),
+                    Part = Convert.ToString(row[1]),
+                    Description = Convert.ToString(row[2]),
+                    Quantity = Convert.ToString(row[3]),
+                    Status = Convert.ToString(row[4]),
+                    Picture = Convert.ToString(row[5])
+
+                });
             }
 
             return returnCollection;
@@ -63,7 +72,11 @@ namespace CADImageViewer
 
             foreach (DataRow row in installationNotes.Rows)
             {
-                returnCollection.Add(new InstallationNote(Convert.ToString(row[0]), Convert.ToString(row[1])));
+                returnCollection.Add(new InstallationNote()
+                {
+                    NoteID = Convert.ToString(row[0]),
+                    NoteText = Convert.ToString(row[1])
+                });
             }
 
             return returnCollection;

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,5 @@ namespace CADImageViewer
     {
         public string NoteID { get; set; }
         public string NoteText { get; set; }
-
-        public InstallationNote( string id, string noteString )
-        {
-            NoteID = id;
-            NoteText = noteString;
-        }
     }
 }
